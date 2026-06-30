@@ -83,13 +83,15 @@ export type LeaderboardEntry = {
   accuracy: number;
 };
 
-export type StadiumId = "wembley" | "camp-nou" | "san-siro" | "maracana" | "lusail";
+export type StadiumId = "default";
 
 export type StadiumTheme = {
   id: StadiumId;
   name: string;
   city: string;
+  moment: string;
   videoSrc: string;
+  cycleMs: number;
   gradient: string;
   orbPrimary: string;
   orbSecondary: string;

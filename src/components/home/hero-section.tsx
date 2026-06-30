@@ -7,7 +7,7 @@ import { HeroVideoBackground } from "./hero-video-background";
 
 export function HeroSection() {
   return (
-    <section className="relative flex min-h-screen flex-col justify-center overflow-hidden">
+    <section className="relative flex min-h-[100dvh] min-h-screen w-full flex-col justify-center overflow-hidden">
       <HeroVideoBackground />
 
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-6 py-32">
