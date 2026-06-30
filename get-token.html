@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TxLINE API Token — Free Tier</title>
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --surface: #141b24;
+      --border: #243041;
+      --text: #e8edf4;
+      --muted: #8b9cb3;
+      --accent: #22c55e;
+      --accent-dim: #166534;
+      --warn: #f59e0b;
+      --error: #ef4444;
+      --pending: #64748b;
+      --running: #3b82f6;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: radial-gradient(ellipse at top, #122033 0%, var(--bg) 55%);
+      color: var(--text);
+      padding: 2rem 1rem 3rem;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin: 0 0 0.35rem;
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin: 0 0 1.5rem;
+      line-height: 1.5;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem 1.35rem;
+      margin-bottom: 1rem;
+    }
+
+    .warn-banner {
+      border-color: #854d0e;
+      background: #1c1408;
+      color: #fcd34d;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    label.field-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .network-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .network-option {
+      flex: 1;
+      min-width: 200px;
+      cursor: pointer;
+    }
+
+    .network-option input { display: none; }
+
+    .network-option span {
+      display: block;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .network-option input:checked + span {
+      border-color: var(--accent);
+      background: #0f1f16;
+    }
+
+    .network-option strong { display: block; margin-bottom: 0.2rem; }
+    .network-option small { color: var(--muted); }
+
+    button.primary {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 0.95rem 1.25rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #052e16;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+
+    button.primary:hover:not(:disabled) { opacity: 0.92; }
+    button.primary:active:not(:disabled) { transform: scale(0.99); }
+    button.primary:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .steps { list-style: none; margin: 0; padding: 0; }
+
+    .step {
+      display: flex;
+      gap: 0.85rem;
+      align-items: flex-start;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .step:last-child { border-bottom: none; }
+
+    .step-icon {
+      width: 1.6rem;
+      height: 1.6rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      background: #1e293b;
+      color: var(--muted);
+    }
+
+    .step.pending .step-icon { background: #1e293b; color: var(--pending); }
+    .step.running .step-icon { background: #1e3a5f; color: #93c5fd; animation: pulse 1.2s infinite; }
+    .step.success .step-icon { background: var(--accent-dim); color: var(--accent); }
+    .step.error .step-icon { background: #450a0a; color: var(--error); }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.55; }
+    }
+
+    .step-body { flex: 1; min-width: 0; }
+    .step-title { font-weight: 600; margin-bottom: 0.15rem; }
+    .step-detail {
+      font-size: 0.85rem;
+      color: var(--muted);
+      word-break: break-all;
+      line-height: 1.45;
+    }
+
+    .step.error .step-detail { color: #fca5a5; }
+
+    .token-box {
+      display: none;
+      margin-top: 0.5rem;
+    }
+
+    .token-box.visible { display: block; }
+
+    .token-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .token-value {
+      background: #0a120d;
+      border: 1px solid var(--accent-dim);
+      border-radius: 10px;
+      padding: 1rem;
+      font-family: "Cascadia Code", "Consolas", monospace;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      word-break: break-all;
+      color: #bbf7d0;
+    }
+
+    .copy-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .copy-btn {
+      border: 1px solid var(--border);
+      background: #1e293b;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 0.5rem 0.85rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover { background: #334155; }
+
+    .error-panel {
+      display: none;
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 10px;
+      background: #1a0a0a;
+      border: 1px solid #7f1d1d;
+      color: #fecaca;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .error-panel.visible { display: block; }
+
+    .footnote {
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: "Cascadia Code", "Consolas", monospace;
+      font-size: 0.85em;
+      background: #1e293b;
+      padding: 0.1em 0.35em;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>TxLINE API Token</h1>
+    <p class="subtitle">
+      Get your free World Cup API credentials via Phantom wallet and an on-chain subscription.
+    </p>
+
+    <div class="card warn-banner" id="networkWarning">
+      <strong>Before you click:</strong> Phantom cannot be switched from this page — set the network in Phantom first.<br /><br />
+      <strong>Devnet:</strong> Phantom → ⚙️ Settings → Developer Settings → turn on <em>Testnet Mode</em> → choose <strong>Devnet</strong>.<br />
+      <strong>Mainnet:</strong> Turn <em>Testnet Mode</em> <strong>off</strong>.<br /><br />
+      Devnet uses <code>txline-dev.txodds.com</code> (SL 1). Mainnet uses <code>txline.txodds.com</code> (SL 12).
+    </div>
+
+    <div class="card">
+      <label class="field-label">Network</label>
+      <div class="network-row">
+        <label class="network-option">
+          <input type="radio" name="network" value="mainnet" checked />
+          <span>
+            <strong>Mainnet</strong>
+            <small>SL 12 · real-time · txline.txodds.com</small>
+          </span>
+        </label>
+        <label class="network-option">
+          <input type="radio" name="network" value="devnet" />
+          <span>
+            <strong>Devnet</strong>
+            <small>SL 1 · 60s delay · txline-dev.txodds.com</small>
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <div class="card">
+      <button class="primary" id="startBtn">Connect Phantom &amp; Get Token</button>
+      <div class="error-panel" id="errorPanel"></div>
+    </div>
+
+    <div class="card">
+      <label class="field-label">Progress</label>
+      <ol class="steps" id="steps"></ol>
+    </div>
+
+    <div class="card token-box" id="tokenBox">
+      <div class="token-label">Your API credentials — save both</div>
+
+      <div style="margin-bottom: 1rem;">
+        <div class="token-label" style="color: var(--muted); font-size: 0.75rem;">Guest JWT (Authorization header)</div>
+        <div class="token-value" id="jwtDisplay"></div>
+        <div class="copy-row">
+          <button class="copy-btn" data-copy="jwt">Copy JWT</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="token-label" style="color: var(--muted); font-size: 0.75rem;">API Token (X-Api-Token header)</div>
+        <div class="token-value" id="apiTokenDisplay"></div>
+        <div class="copy-row">
+          <button class="copy-btn" data-copy="api">Copy API Token</button>
+          <button class="copy-btn" data-copy="both">Copy both (JSON)</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="footnote">
+      If fetch fails with a CORS error when opening this file directly, serve it locally:
+      <code>npx serve .</code> then open <code>http://localhost:3000/get-token.html</code>.
+      Phantom extension is required.
+    </p>
+  </div>
+
+  <script type="module">
+    import {
+      Connection,
+      PublicKey,
+      SystemProgram,
+      Transaction,
+      TransactionInstruction,
+    } from "https://esm.sh/@solana/web3.js@1.98.4";
+    import {
+      ASSOCIATED_TOKEN_PROGRAM_ID,
+      TOKEN_2022_PROGRAM_ID,
+      createAssociatedTokenAccountIdempotentInstruction,
+      getAssociatedTokenAddressSync,
+    } from "https://esm.sh/@solana/spl-token@0.4.14";
+
+    const SUBSCRIBE_DISCRIMINATOR = new Uint8Array([254, 28, 191, 138, 156, 179, 183, 53]);
+    const DURATION_WEEKS = 4;
+    const SELECTED_LEAGUES = [];
+
+    const CONFIG = {
+      mainnet: {
+        rpcUrl: "https://api.mainnet-beta.solana.com",
+        apiOrigin: "https://txline.txodds.com",
+        programId: "9ExbZjAapQww1vfcisDmrngPinHTEfpjYRWMunJgcKaA",
+        txlTokenMint: "Zhw9TVKp68a1QrftncMSd6ELXKDtpVMNuMGr1jNwdeL",
+        serviceLevelId: 12,
+        chainId: "solana:mainnet",
+      },
+      devnet: {
+        rpcUrl: "https://api.devnet.solana.com",
+        apiOrigin: "https://txline-dev.txodds.com",
+        programId: "6pW64gN1s2uqjHkn1unFeEjAwJkPGHoppGvS715wyP2J",
+        txlTokenMint: "4Zao8ocPhmMgq7PdsYWyxvqySMGx7xb9cMftPMkEokRG",
+        serviceLevelId: 1,
+        chainId: "solana:devnet",
+      },
+    };
+
+    const STEP_DEFS = [
+      { id: "phantom", title: "Connect Phantom wallet" },
+      { id: "network", title: "Verify wallet is on the selected network" },
+      { id: "jwt", title: "Get guest JWT" },
+      { id: "accounts", title: "Derive on-chain accounts" },
+      { id: "subscribe", title: "Subscribe on-chain (free tier)" },
+      { id: "sign", title: "Sign activation message" },
+      { id: "activate", title: "Activate API token" },
+    ];
+
+    const stepsEl = document.getElementById("steps");
+    const startBtn = document.getElementById("startBtn");
+    const errorPanel = document.getElementById("errorPanel");
+    const tokenBox = document.getElementById("tokenBox");
+    const jwtDisplay = document.getElementById("jwtDisplay");
+    const apiTokenDisplay = document.getElementById("apiTokenDisplay");
+
+    let savedJwt = "";
+    let savedApiToken = "";
+    const stepState = {};
+
+    function getNetwork() {
+      return document.querySelector('input[name="network"]:checked').value;
+    }
+
+    function renderSteps() {
+      stepsEl.innerHTML = STEP_DEFS.map((step, i) => {
+        const state = stepState[step.id] || { status: "pending", detail: "" };
+        const icons = { pending: i + 1, running: "…", success: "✓", error: "✕" };
+        return `
+          <li class="step ${state.status}" data-step="${step.id}">
+            <div class="step-icon">${icons[state.status]}</div>
+            <div class="step-body">
+              <div class="step-title">${step.title}</div>
+              ${state.detail ? `<div class="step-detail">${escapeHtml(state.detail)}</div>` : ""}
+            </div>
+          </li>`;
+      }).join("");
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function setStep(id, status, detail = "") {
+      stepState[id] = { status, detail };
+      renderSteps();
+    }
+
+    function showError(message) {
+      errorPanel.textContent = message;
+      errorPanel.classList.add("visible");
+    }
+
+    function clearError() {
+      errorPanel.textContent = "";
+      errorPanel.classList.remove("visible");
+    }
+
+    function resetFlow() {
+      STEP_DEFS.forEach((s) => { stepState[s.id] = { status: "pending", detail: "" }; });
+      renderSteps();
+      tokenBox.classList.remove("visible");
+      clearError();
+    }
+
+    function getPhantom() {
+      const provider = window.solana;
+      if (!provider?.isPhantom) {
+        throw new Error(
+          "Phantom wallet not found. Install the Phantom browser extension and refresh this page."
+        );
+      }
+      return provider;
+    }
+
+    const GENESIS_HASHES = {
+      mainnet: "5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d",
+      devnet: "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG",
+    };
+
+    async function trySwitchPhantomNetwork(chainId) {
+      const phantom = getPhantom();
+      try {
+        await phantom.request({
+          method: "wallet_switchSolanaChain",
+          params: [{ chainId }],
+        });
+        return "switched";
+      } catch {
+        // Phantom does not support wallet_switchSolanaChain ("Unsupported path").
+        // User must switch manually in Phantom settings.
+        return "manual";
+      }
+    }
+
+    async function verifyNetworkReady(cfg, userPubkey) {
+      const network = getNetwork();
+      const connection = new Connection(cfg.rpcUrl, "confirmed");
+      const [balance, genesisHash] = await Promise.all([
+        connection.getBalance(userPubkey),
+        connection.getGenesisHash(),
+      ]);
+
+      const expectedGenesis = GENESIS_HASHES[network];
+      if (genesisHash !== expectedGenesis) {
+        throw new Error(
+          `RPC genesis mismatch for ${network}. Expected ${expectedGenesis}, got ${genesisHash}.`
+        );
+      }
+
+      if (balance === 0) {
+        const phantomSteps =
+          network === "devnet"
+            ? "Phantom → Settings → Developer Settings → enable Testnet Mode → select Devnet"
+            : "Phantom → Settings → Developer Settings → disable Testnet Mode (mainnet)";
+        throw new Error(
+          `No SOL found for your wallet on ${network}.\n\n` +
+            `1. Set Phantom to ${network}:\n   ${phantomSteps}\n` +
+            `2. Fund this address on ${network}: ${userPubkey.toBase58()}\n` +
+            `   Devnet faucet: https://faucet.solana.com`
+        );
+      }
+
+      return { balance, genesisHash };
+    }
+
+    async function fetchGuestJwt(apiOrigin) {
+      const res = await fetch(`${apiOrigin}/auth/guest/start`, { method: "POST" });
+      if (!res.ok) {
+        const body = await res.text();
+        throw new Error(`Guest auth failed (${res.status}): ${body || res.statusText}`);
+      }
+      const data = await res.json();
+      if (!data.token) throw new Error("Guest auth response missing token field.");
+      return data.token;
+    }
+
+    function deriveAccounts(cfg, userPubkey) {
+      const programId = new PublicKey(cfg.programId);
+      const txlTokenMint = new PublicKey(cfg.txlTokenMint);
+
+      const [tokenTreasuryPda] = PublicKey.findProgramAddressSync(
+        [new TextEncoder().encode("token_treasury_v2")],
+        programId
+      );
+
+      const tokenTreasuryVault = getAssociatedTokenAddressSync(
+        txlTokenMint,
+        tokenTreasuryPda,
+        true,
+        TOKEN_2022_PROGRAM_ID,
+        ASSOCIATED_TOKEN_PROGRAM_ID
+      );
+
+      const [pricingMatrixPda] = PublicKey.findProgramAddressSync(
+        [new TextEncoder().encode("pricing_matrix")],
+        programId
+      );
+
+      const userTokenAccount = getAssociatedTokenAddressSync(
+        txlTokenMint,
+        userPubkey,
+        false,
+        TOKEN_2022_PROGRAM_ID,
+        ASSOCIATED_TOKEN_PROGRAM_ID
+      );
+
+      return { programId, txlTokenMint, tokenTreasuryPda, tokenTreasuryVault, pricingMatrixPda, userTokenAccount };
+    }
+
+    function buildSubscribeInstruction(accounts, serviceLevelId) {
+      const data = new Uint8Array(11);
+      data.set(SUBSCRIBE_DISCRIMINATOR, 0);
+      data[8] = serviceLevelId & 0xff;
+      data[9] = (serviceLevelId >> 8) & 0xff;
+      data[10] = DURATION_WEEKS;
+
+      const keys = [
+        { pubkey: accounts.user, isSigner: true, isWritable: true },
+        { pubkey: accounts.pricingMatrixPda, isSigner: false, isWritable: false },
+        { pubkey: accounts.txlTokenMint, isSigner: false, isWritable: false },
+        { pubkey: accounts.userTokenAccount, isSigner: false, isWritable: true },
+        { pubkey: accounts.tokenTreasuryVault, isSigner: false, isWritable: true },
+        { pubkey: accounts.tokenTreasuryPda, isSigner: false, isWritable: false },
+        { pubkey: TOKEN_2022_PROGRAM_ID, isSigner: false, isWritable: false },
+        { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
+        { pubkey: ASSOCIATED_TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
+      ];
+
+      return new TransactionInstruction({
+        keys,
+        programId: accounts.programId,
+        data,
+      });
+    }
+
+    async function subscribeOnChain(cfg, phantom, userPubkey, derived) {
+      const connection = new Connection(cfg.rpcUrl, "confirmed");
+
+      const tx = new Transaction();
+      const ataInfo = await connection.getAccountInfo(derived.userTokenAccount);
+      if (!ataInfo) {
+        tx.add(
+          createAssociatedTokenAccountIdempotentInstruction(
+            userPubkey,
+            derived.userTokenAccount,
+            userPubkey,
+            derived.txlTokenMint,
+            TOKEN_2022_PROGRAM_ID,
+            ASSOCIATED_TOKEN_PROGRAM_ID
+          )
+        );
+      }
+
+      tx.add(
+        buildSubscribeInstruction(
+          {
+            user: userPubkey,
+            programId: derived.programId,
+            pricingMatrixPda: derived.pricingMatrixPda,
+            txlTokenMint: derived.txlTokenMint,
+            userTokenAccount: derived.userTokenAccount,
+            tokenTreasuryVault: derived.tokenTreasuryVault,
+            tokenTreasuryPda: derived.tokenTreasuryPda,
+          },
+          cfg.serviceLevelId
+        )
+      );
+
+      const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash("confirmed");
+      tx.recentBlockhash = blockhash;
+      tx.feePayer = userPubkey;
+
+      const signed = await phantom.signTransaction(tx);
+      const rawSig = await connection.sendRawTransaction(signed.serialize(), {
+        skipPreflight: false,
+        preflightCommitment: "confirmed",
+      });
+
+      await connection.confirmTransaction({ signature: rawSig, blockhash, lastValidBlockHeight }, "confirmed");
+      return rawSig;
+    }
+
+    async function signActivationMessage(phantom, messageString) {
+      const message = new TextEncoder().encode(messageString);
+      const result = await phantom.signMessage(message, "utf8");
+      return btoa(String.fromCharCode(...result.signature));
+    }
+
+    async function activateToken(apiOrigin, jwt, txSig, walletSignature) {
+      const res = await fetch(`${apiOrigin}/api/token/activate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`,
+        },
+        body: JSON.stringify({
+          txSig,
+          walletSignature,
+          leagues: SELECTED_LEAGUES,
+        }),
+      });
+
+      const text = await res.text();
+      let data;
+      try { data = JSON.parse(text); } catch { data = text; }
+
+      if (!res.ok) {
+        throw new Error(`Activation failed (${res.status}): ${typeof data === "string" ? data : JSON.stringify(data)}`);
+      }
+
+      const apiToken = typeof data === "object" ? (data.token || JSON.stringify(data)) : data;
+      if (!apiToken) throw new Error("Activation response did not include an API token.");
+      return apiToken;
+    }
+
+    function formatCorsHelp(err) {
+      const msg = err?.message || String(err);
+      if (msg.includes("Failed to fetch") || msg.includes("NetworkError") || msg.includes("CORS")) {
+        return (
+          msg +
+          "\n\nThis often happens when opening the file via file://. Run a local server instead:\n" +
+          "  npx serve .\n" +
+          "Then open http://localhost:3000/get-token.html"
+        );
+      }
+      return msg;
+    }
+
+    async function runFlow() {
+      resetFlow();
+      startBtn.disabled = true;
+
+      const cfg = CONFIG[getNetwork()];
+      let phantom;
+      let userPubkey;
+      let jwt;
+      let txSig;
+
+      try {
+        setStep("phantom", "running");
+        phantom = getPhantom();
+        const resp = await phantom.connect();
+        userPubkey = new PublicKey(resp.publicKey.toString());
+        setStep("phantom", "success", `Connected: ${userPubkey.toBase58()}`);
+
+        setStep("network", "running", "Checking SOL balance on selected network…");
+        const switchResult = await trySwitchPhantomNetwork(cfg.chainId);
+        const { balance } = await verifyNetworkReady(cfg, userPubkey);
+        const sol = (balance / 1e9).toFixed(4);
+        const switchNote =
+          switchResult === "switched"
+            ? "Phantom network switched automatically."
+            : `Phantom set to ${getNetwork()} manually (required).`;
+        setStep(
+          "network",
+          "success",
+          `${switchNote} Found ${sol} SOL on ${getNetwork()}.`
+        );
+
+        setStep("jwt", "running");
+        jwt = await fetchGuestJwt(cfg.apiOrigin);
+        savedJwt = jwt;
+        setStep("jwt", "success", `JWT received (${jwt.slice(0, 24)}…)`);
+
+        setStep("accounts", "running");
+        const derived = deriveAccounts(cfg, userPubkey);
+        setStep(
+          "accounts",
+          "success",
+          `Program ${cfg.programId.slice(0, 8)}… · SL ${cfg.serviceLevelId} · ${DURATION_WEEKS} weeks`
+        );
+
+        setStep("subscribe", "running", `Submitting subscribe(${cfg.serviceLevelId}, ${DURATION_WEEKS})…`);
+        txSig = await subscribeOnChain(cfg, phantom, userPubkey, derived);
+        setStep("subscribe", "success", `Confirmed: ${txSig}`);
+
+        setStep("sign", "running");
+        const leaguesPart = SELECTED_LEAGUES.join(",");
+        const messageString = `${txSig}:${leaguesPart}:${jwt}`;
+        const walletSignature = await signActivationMessage(phantom, messageString);
+        setStep("sign", "success", "Activation message signed");
+
+        setStep("activate", "running");
+        const apiToken = await activateToken(cfg.apiOrigin, jwt, txSig, walletSignature);
+        savedApiToken = apiToken;
+        setStep("activate", "success", "API token activated");
+
+        jwtDisplay.textContent = jwt;
+        apiTokenDisplay.textContent = apiToken;
+        tokenBox.classList.add("visible");
+      } catch (err) {
+        const message = formatCorsHelp(err);
+        showError(message);
+
+        const runningStep = STEP_DEFS.find((s) => stepState[s.id]?.status === "running");
+        if (runningStep) {
+          setStep(runningStep.id, "error", message.split("\n")[0]);
+        } else {
+          setStep("phantom", "error", message.split("\n")[0]);
+        }
+
+        if (message.includes("ActiveSubscription") || message.includes("60016") || message.includes("already have an active subscription")) {
+          showError(
+            message +
+              "\n\nYour wallet already has an active subscription. You may only need to re-activate with a new JWT — contact TxLINE support or wait for expiry."
+          );
+        }
+      } finally {
+        startBtn.disabled = false;
+      }
+    }
+
+    document.querySelectorAll(".copy-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const kind = btn.dataset.copy;
+        let text = "";
+        if (kind === "jwt") text = savedJwt;
+        else if (kind === "api") text = savedApiToken;
+        else text = JSON.stringify({ jwt: savedJwt, apiToken: savedApiToken }, null, 2);
+
+        try {
+          await navigator.clipboard.writeText(text);
+          const prev = btn.textContent;
+          btn.textContent = "Copied!";
+          setTimeout(() => { btn.textContent = prev; }, 1500);
+        } catch {
+          alert("Copy failed — select and copy manually.");
+        }
+      });
+    });
+
+    startBtn.addEventListener("click", runFlow);
+    resetFlow();
+  </script>
+</body>
+</html>
