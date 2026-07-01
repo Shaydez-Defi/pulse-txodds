@@ -4,7 +4,7 @@ import { GlassCard } from "@/components/ui/glass-card";
 export function PlayerMomentumList({ players }: { players: PlayerMomentum[] }) {
   return (
     <div>
-      <h3 className="font-display mb-4 text-lg font-semibold">Player momentum</h3>
+      <h3 className="font-editorial mb-5 text-lg font-semibold">Player momentum</h3>
       <div className="space-y-3">
         {players.map((player) => (
           <GlassCard key={`${player.team}-${player.name}`}>
@@ -14,7 +14,7 @@ export function PlayerMomentumList({ players }: { players: PlayerMomentum[] }) {
                 <p className="text-xs text-[var(--text-muted)]">{player.team}</p>
               </div>
               {player.trending && (
-                <span className="rounded-full border border-[var(--accent-amber)]/30 bg-[var(--accent-amber)]/10 px-2 py-0.5 text-[10px] uppercase tracking-widest text-[#c4b08a]">
+                <span className="rounded-full border border-[var(--pulse-coral)]/30 bg-[var(--pulse-coral)]/10 px-2 py-0.5 text-[10px] uppercase tracking-widest text-[#fecaca]">
                   Trending
                 </span>
               )}

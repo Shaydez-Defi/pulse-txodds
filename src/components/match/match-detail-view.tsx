@@ -65,26 +65,22 @@ export function MatchDetailView({
       >
         <div className="flex flex-wrap items-center justify-between gap-8">
           <div className="text-center md:text-left">
-            <p className="text-xs font-bold uppercase tracking-widest text-white/40">
-              {match.competition}
-            </p>
-            <h1 className="font-display mt-4 text-3xl font-bold md:text-4xl">
+            <p className="pulse-eyebrow">{match.competition}</p>
+            <h1 className="font-editorial mt-4 text-3xl font-semibold md:text-4xl">
               {getCountryFlag(match.homeTeam)} {match.homeTeam}
             </h1>
           </div>
           <div className="text-center">
-            <p className="font-display text-7xl font-black text-white">
+            <p className="pulse-score text-7xl text-white md:text-8xl">
               {match.homeScore} – {match.awayScore}
             </p>
-            <p className="mt-2 text-sm font-medium uppercase tracking-widest text-[#22C55E]">
-              {match.status === "live" && (
-                <span className="mr-2 inline-block h-2 w-2 animate-pulse rounded-full bg-[#22C55E]" />
-              )}
+            <p className="mt-2 text-sm font-medium uppercase tracking-widest text-[var(--pulse-coral)]">
+              {match.status === "live" && <span className="pulse-live-dot mr-2" />}
               {match.minuteLabel}
             </p>
           </div>
           <div className="text-center md:text-right">
-            <h1 className="font-display text-3xl font-bold md:text-4xl">
+            <h1 className="font-editorial text-3xl font-semibold md:text-4xl">
               {match.awayTeam} {getCountryFlag(match.awayTeam)}
             </h1>
           </div>

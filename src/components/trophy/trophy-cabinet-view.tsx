@@ -20,7 +20,7 @@ export function TrophyCabinetView() {
       <div className="grid gap-4 sm:grid-cols-3">
         {MOCK_STATS.map((stat) => (
           <GlassCard key={stat.label} className="text-center">
-            <p className="font-display text-3xl font-bold">{stat.value}</p>
+            <p className="pulse-score text-4xl text-white">{stat.value}</p>
             <p className="mt-2 text-sm text-[var(--text-secondary)]">{stat.label}</p>
           </GlassCard>
         ))}
@@ -36,7 +36,7 @@ export function TrophyCabinetView() {
               key={badge.id}
               className="rounded-xl border border-white/8 bg-white/[0.03] p-5"
             >
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--accent-green)]/15 text-lg">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--pulse-purple)]/15 text-lg text-[var(--pulse-violet-soft)]">
                 ◆
               </div>
               <p className="font-medium">{badge.label}</p>

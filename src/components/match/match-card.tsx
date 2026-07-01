@@ -4,16 +4,17 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import type { EnrichedMatch } from "@/lib/types";
 import { getCountryFlag } from "@/lib/flags";
+import { momentumClass } from "@/lib/pulse-engine";
 import { GlassCard } from "@/components/ui/glass-card";
 import { PulseMeterBar } from "@/components/ui/pulse-meter-bar";
 import clsx from "clsx";
 
 function getCardGlow(pulse: number) {
   if (pulse > 90) {
-    return "0 0 20px rgba(239, 68, 68, 0.20), 0 0 60px rgba(239, 68, 68, 0.08)";
+    return "0 0 24px rgba(249, 112, 102, 0.22), 0 0 60px rgba(124, 58, 237, 0.08)";
   }
   if (pulse > 75) {
-    return "0 0 20px rgba(34, 197, 94, 0.15), 0 0 60px rgba(34, 197, 94, 0.05)";
+    return "0 0 20px rgba(124, 58, 237, 0.18), 0 0 48px rgba(124, 58, 237, 0.06)";
   }
   return "none";
 }
@@ -21,7 +22,7 @@ function getCardGlow(pulse: number) {
 function MomentumArrow({ dir }: { dir: "up" | "down" | "neutral" }) {
   if (dir === "neutral") return <span className="text-[var(--text-muted)]">—</span>;
   return (
-    <span className={dir === "up" ? "text-[#22C55E]" : "text-[var(--accent-red)]"}>
+    <span className={momentumClass(dir)}>
       {dir === "up" ? "↑" : "↓"}
     </span>
   );
@@ -33,13 +34,16 @@ export function MatchCard({ match }: { match: EnrichedMatch }) {
 
   return (
     <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.2 }}>
-      <Link href={`/match/${match.fixtureId}`} className="transition-colors hover:text-[#22C55E]">
+      <Link
+        href={`/match/${match.fixtureId}`}
+        className="transition-colors hover:text-[var(--pulse-violet-soft)]"
+      >
         <GlassCard
-          className="glass-secondary relative block overflow-hidden p-5 transition-all duration-200 hover:border-white/20"
+          className="glass-secondary relative block overflow-hidden p-6 transition-all duration-200 hover:border-white/20"
           style={{ boxShadow: getCardGlow(match.pulse) }}
         >
           {match.anticipation && (
-            <div className="absolute right-3 top-3 z-10 rounded-full border border-[var(--accent-red)]/40 bg-[var(--accent-red)]/10 px-2 py-1 text-xs uppercase tracking-widest text-[#c9a0a0] animate-pulse">
+            <div className="pulse-pressure-badge absolute right-4 top-4 z-10 animate-pulse-breathe rounded-full px-3 py-1">
               High pressure
             </div>
           )}
@@ -52,26 +56,24 @@ export function MatchCard({ match }: { match: EnrichedMatch }) {
                 </span>
                 <MomentumArrow dir={match.momentumHome} />
               </div>
-              <p className="mt-1 truncate text-base font-semibold text-white">
+              <p className="font-editorial mt-1 truncate text-base font-semibold text-white">
                 {getCountryFlag(match.homeTeam)} {match.homeTeam}
               </p>
             </div>
 
             <div className="text-center">
-              <p className="font-display text-4xl font-black tracking-tight text-white">
+              <p className="pulse-score text-4xl text-white sm:text-5xl">
                 {match.homeScore} – {match.awayScore}
               </p>
               <p
                 className={clsx(
                   "mt-1 uppercase tracking-widest",
-                  live && "text-sm font-medium text-[#22C55E]",
+                  live && "text-sm font-medium text-[var(--pulse-coral)]",
                   finished && "text-xs text-[var(--text-muted)]",
                   !live && !finished && "text-xs text-[var(--text-secondary)]"
                 )}
               >
-                {live && (
-                  <span className="mr-2 inline-block h-2 w-2 animate-pulse rounded-full bg-[#22C55E]" />
-                )}
+                {live && <span className="pulse-live-dot mr-2" />}
                 {match.minuteLabel}
               </p>
             </div>
@@ -83,13 +85,13 @@ export function MatchCard({ match }: { match: EnrichedMatch }) {
                   {match.awayCode}
                 </span>
               </div>
-              <p className="mt-1 truncate text-base font-semibold text-white">
+              <p className="font-editorial mt-1 truncate text-base font-semibold text-white">
                 {match.awayTeam} {getCountryFlag(match.awayTeam)}
               </p>
             </div>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-8">
             <PulseMeterBar value={match.pulse} />
           </div>
         </GlassCard>

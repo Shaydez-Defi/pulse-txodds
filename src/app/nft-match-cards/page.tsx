@@ -3,7 +3,7 @@ import { NftMatchCardsGrid } from "@/components/nft/nft-match-cards-grid";
 
 export default function NftMatchCardsPage() {
   return (
-    <section className="px-6 py-16">
+    <section className="pulse-page-bg pulse-page">
       <div className="mx-auto max-w-6xl">
         <PageHeader
           eyebrow="Collectibles"

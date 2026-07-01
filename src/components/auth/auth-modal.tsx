@@ -75,10 +75,10 @@ export function AuthModal({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: "spring", duration: 0.5 }}
-          className="relative w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-[#0c100d]/90 p-8 shadow-2xl backdrop-blur-xl"
+          className="relative w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-[var(--bg-charcoal)]/95 p-8 shadow-2xl backdrop-blur-xl"
         >
-          <div className="absolute -left-16 -top-16 h-32 w-32 rounded-full bg-[var(--accent-green)]/20 blur-2xl" />
-          <div className="absolute -bottom-16 -right-16 h-32 w-32 rounded-full bg-emerald-500/10 blur-2xl" />
+          <div className="absolute -left-16 -top-16 h-32 w-32 rounded-full bg-[var(--pulse-purple)]/20 blur-2xl" />
+          <div className="absolute -bottom-16 -right-16 h-32 w-32 rounded-full bg-[var(--pulse-coral)]/10 blur-2xl" />
 
           <button
             onClick={onClose}
@@ -90,7 +90,7 @@ export function AuthModal({
           </button>
 
           <div className="relative text-center">
-            <h2 className="font-display text-2xl font-bold tracking-tight text-white">
+            <h2 className="font-headline text-3xl tracking-wide text-white">
               Sign in to continue
             </h2>
             <p className="mt-2 text-sm text-[var(--text-secondary)]">
@@ -111,7 +111,7 @@ export function AuthModal({
                 Sign in with Google
               </button>
 
-              <div className="relative flex w-full justify-center [&_.wallet-adapter-button]:!h-[48px] [&_.wallet-adapter-button]:!w-full [&_.wallet-adapter-button]:!justify-center [&_.wallet-adapter-button]:!rounded-full [&_.wallet-adapter-button]:!border-none [&_.wallet-adapter-button]:!bg-emerald-600 [&_.wallet-adapter-button]:!font-medium [&_.wallet-adapter-button]:hover:!bg-emerald-500">
+              <div className="relative flex w-full justify-center [&_.wallet-adapter-button]:!h-[48px] [&_.wallet-adapter-button]:!w-full [&_.wallet-adapter-button]:!justify-center">
                 <WalletMultiButton>Connect Wallet (Phantom)</WalletMultiButton>
               </div>
             </div>

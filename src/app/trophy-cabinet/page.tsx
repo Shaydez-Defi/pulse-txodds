@@ -3,7 +3,7 @@ import { TrophyCabinetView } from "@/components/trophy/trophy-cabinet-view";
 
 export default function TrophyCabinetPage() {
   return (
-    <section className="px-6 py-16">
+    <section className="pulse-page-bg pulse-page">
       <div className="mx-auto max-w-5xl">
         <PageHeader
           eyebrow="Achievements"

@@ -14,20 +14,20 @@ export function LiveMatchesSection() {
       <div className="relative mx-auto max-w-7xl">
         <div className="mb-12 flex items-end justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-white/40">
-              <span className="mr-2 inline-block h-2 w-2 animate-pulse rounded-full bg-[#22C55E]" />
+            <p className="pulse-eyebrow flex items-center gap-2">
+              <span className="pulse-live-dot" />
               Live now
             </p>
-            <h2 className="font-display mt-2 text-3xl font-bold tracking-tight">
+            <h2 className="font-headline mt-3 text-4xl tracking-wide text-white">
               Match intelligence
             </h2>
           </div>
-          <p className="text-sm text-[var(--text-muted)]">
+          <p className="font-editorial text-sm text-[var(--text-muted)]">
             {isLoading ? "Syncing…" : `${live.length} live`}
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2">
           {(data ?? []).slice(0, 6).map((match) => (
             <MatchCard key={match.fixtureId} match={match} />
           ))}

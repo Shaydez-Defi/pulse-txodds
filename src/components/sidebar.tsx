@@ -94,7 +94,7 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
           <div className="flex items-center gap-2">
             {isAuthenticated ? (
               <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2 py-1">
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--accent-green)] text-xs font-semibold text-white">
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--pulse-purple)] text-xs font-semibold text-white">
                   {displayName.charAt(0).toUpperCase()}
                 </span>
                 <span className="max-w-[80px] truncate text-xs text-white">
@@ -161,8 +161,8 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
                 "flex items-center rounded-lg text-sm transition-colors",
                 collapsed ? "justify-center px-2 py-2.5" : "gap-3 px-4 py-2.5",
                 active
-                  ? "border-l-2 border-[#22C55E] bg-[#22C55E]/10 text-[#22C55E]"
-                  : "text-[var(--text-secondary)] hover:bg-white/5 hover:text-[#22C55E]"
+                  ? "border-l-2 border-[var(--pulse-purple)] bg-[var(--pulse-purple)]/10 text-[var(--pulse-violet-soft)]"
+                  : "text-[var(--text-secondary)] hover:bg-white/5 hover:text-[var(--pulse-violet-soft)]"
               )}
             >
               <Icon className="h-5 w-5 shrink-0" />

@@ -3,7 +3,7 @@ import { FanChatPlaceholder } from "@/components/chat/fan-chat-placeholder";
 
 export default function FanChatPage() {
   return (
-    <section className="px-6 py-16">
+    <section className="pulse-page-bg pulse-page">
       <div className="mx-auto max-w-3xl">
         <PageHeader
           eyebrow="Community"

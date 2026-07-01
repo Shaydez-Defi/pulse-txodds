@@ -26,7 +26,7 @@ export function NftMatchCardsGrid() {
       pulseScore: 94,
       tier: "Legendary",
       match: "Argentina vs England",
-      imageGlow: "from-amber-500/30 to-red-500/20",
+      imageGlow: "from-[var(--pulse-coral)]/25 to-[var(--pulse-purple)]/15",
       minted: false,
     },
     {
@@ -46,7 +46,7 @@ export function NftMatchCardsGrid() {
       pulseScore: 78,
       tier: "Rare",
       match: "France vs Spain",
-      imageGlow: "from-emerald-500/30 to-teal-500/20",
+      imageGlow: "from-[var(--pulse-violet)]/25 to-[var(--pulse-purple)]/15",
       minted: false,
     },
   ]);
@@ -89,17 +89,17 @@ export function NftMatchCardsGrid() {
                 <span
                   className={`rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-wider ${
                     card.tier === "Legendary"
-                      ? "border border-amber-500/30 bg-amber-500/20 text-amber-400"
+                      ? "border border-[var(--pulse-coral)]/30 bg-[var(--pulse-coral)]/15 text-[var(--pulse-coral)]"
                       : card.tier === "Epic"
-                        ? "border border-purple-500/30 bg-purple-500/20 text-purple-400"
-                        : "border border-emerald-500/30 bg-emerald-500/20 text-emerald-400"
+                        ? "border border-[var(--pulse-purple)]/30 bg-[var(--pulse-purple)]/15 text-[var(--pulse-violet-soft)]"
+                        : "border border-white/15 bg-white/5 text-[var(--text-secondary)]"
                   }`}
                 >
                   {card.tier}
                 </span>
 
                 <div className="mt-6 flex h-20 w-20 items-center justify-center rounded-full border border-white/10 bg-black/40 backdrop-blur-md">
-                  <span className="font-display text-3xl font-extrabold text-white">
+                  <span className="pulse-score text-4xl text-white">
                     {card.pulseScore}
                   </span>
                 </div>
@@ -138,13 +138,13 @@ export function NftMatchCardsGrid() {
                     Connect Wallet to Mint
                   </button>
                 ) : card.minted ? (
-                  <div className="w-full rounded-full border border-emerald-500/20 bg-emerald-500/10 py-2.5 text-center text-xs font-semibold text-emerald-400">
+                  <div className="w-full rounded-full border border-[var(--pulse-purple)]/25 bg-[var(--pulse-purple)]/10 py-2.5 text-center text-xs font-semibold text-[var(--pulse-violet-soft)]">
                     ✓ Minted Successfully
                   </div>
                 ) : (
                   <button
                     onClick={() => mint(card.id)}
-                    className="w-full rounded-full bg-white py-2.5 text-center text-xs font-semibold text-black transition-opacity hover:opacity-90 active:scale-[0.98]"
+                    className="pulse-btn-primary w-full py-2.5 text-xs"
                   >
                     Mint NFT Card
                   </button>

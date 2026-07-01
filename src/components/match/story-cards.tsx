@@ -7,7 +7,7 @@ import { GlassCard } from "@/components/ui/glass-card";
 export function StoryCards({ stories }: { stories: StoryCard[] }) {
   return (
     <div>
-      <h3 className="font-display mb-4 text-lg font-semibold">Match narrative</h3>
+      <h3 className="font-editorial mb-5 text-lg font-semibold">Match narrative</h3>
       <div className="space-y-3">
         <AnimatePresence initial={false}>
           {stories.map((story) => (

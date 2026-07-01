@@ -26,7 +26,7 @@ export function MobileTabBar() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-black/80 backdrop-blur-xl md:hidden">
+    <nav className="glass-sidebar fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 md:hidden">
       <div className="flex items-stretch justify-around px-1 pb-2 pt-1">
         {TABS.map((tab) => {
           const active = isActive(pathname, tab.href, tab.label);
@@ -38,13 +38,13 @@ export function MobileTabBar() {
               className="relative flex min-w-0 flex-1 flex-col items-center gap-1 px-1 py-2"
             >
               {active && (
-                <span className="absolute top-0 left-1/2 h-0.5 w-8 -translate-x-1/2 rounded-full bg-[var(--accent-green)]" />
+                <span className="absolute top-0 left-1/2 h-0.5 w-8 -translate-x-1/2 rounded-full bg-[var(--pulse-purple)] shadow-[0_0_8px_var(--glow-purple)]" />
               )}
               <Icon active={active} />
               <span
                 className={clsx(
                   "text-[10px] font-medium",
-                  active ? "text-white" : "text-[var(--text-muted)]"
+                  active ? "text-[var(--pulse-violet-soft)]" : "text-[var(--text-muted)]"
                 )}
               >
                 {tab.label}

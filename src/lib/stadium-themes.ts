@@ -11,10 +11,10 @@ export const STADIUM_THEMES: StadiumTheme[] = [
     moment: "Football intelligence",
     videoSrc: "/videos/hero.mp4",
     cycleMs: 0,
-    gradient: "linear-gradient(135deg, #0a1218 0%, #1a2838 50%, #080c10 100%)",
-    orbPrimary: "rgba(90, 120, 150, 0.18)",
-    orbSecondary: "rgba(180, 190, 200, 0.08)",
-    accent: "#7a8fa3",
+    gradient: "linear-gradient(135deg, #0a0810 0%, #1a1724 50%, #14121c 100%)",
+    orbPrimary: "rgba(124, 58, 237, 0.16)",
+    orbSecondary: "rgba(249, 112, 102, 0.08)",
+    accent: "#8b5cf6",
   },
 ];
 

@@ -5,6 +5,7 @@ import { usePredictionsStore } from "@/stores/predictions-store";
 import { useAuthModalStore } from "@/stores/auth-modal-store";
 import { useIsAuthenticated } from "@/hooks/use-is-authenticated";
 import { PageHeader } from "@/components/layout/page-header";
+import { PulseButton } from "@/components/ui/pulse-button";
 import { GlassCard } from "@/components/ui/glass-card";
 import { TrophyCabinetView } from "@/components/trophy/trophy-cabinet-view";
 import { NftMatchCardsGrid } from "@/components/nft/nft-match-cards-grid";
@@ -23,13 +24,11 @@ function SignInPrompt() {
       <p className="mt-2 text-sm text-[var(--text-secondary)]">
         Connect with Google or Phantom to sync predictions, trophies, and settings.
       </p>
-      <button
-        type="button"
-        onClick={() => openAuthModal()}
-        className="mt-6 rounded-full bg-white px-8 py-3 text-sm font-semibold text-black transition-opacity hover:opacity-90"
-      >
-        Sign in to continue
-      </button>
+      <div className="mt-6 flex justify-center">
+        <PulseButton type="button" onClick={() => openAuthModal()} variant="primary">
+          Sign in to continue
+        </PulseButton>
+      </div>
     </GlassCard>
   );
 }
@@ -65,7 +64,7 @@ function SettingsSection() {
       <div className="mt-4 space-y-2 text-sm text-[var(--text-secondary)]">
         <p className="flex justify-between border-b border-white/8 py-3">
           <span>Match alerts</span>
-          <span className="text-[var(--accent-green)]">On</span>
+          <span className="text-[var(--pulse-violet-soft)]">On</span>
         </p>
         <p className="flex justify-between border-b border-white/8 py-3">
           <span>Pulse threshold</span>
@@ -137,7 +136,7 @@ export default function MyPulseHubPage() {
   const isAuthenticated = useIsAuthenticated();
 
   return (
-    <section className="px-6 py-16">
+    <section className="pulse-page-bg pulse-page">
       <div className="mx-auto max-w-4xl space-y-12">
         <PageHeader
           eyebrow="Hub"

@@ -66,11 +66,15 @@ export function LeaderboardTable() {
                   isMe && "bg-white/5"
                 )}
               >
-                <td className="py-4 pr-4 font-mono">{row.rank}</td>
+                <td className="py-4 pr-4">
+                  <span className="pulse-score text-xl text-white">{row.rank}</span>
+                </td>
                 <td className="py-4 pr-4 font-mono">{row.wallet}</td>
                 <td className="py-4 pr-4">{row.predictions}</td>
                 <td className="py-4 pr-4">{row.correct}</td>
-                <td className="py-4">{row.accuracy}%</td>
+                <td className="py-4 font-medium text-[var(--pulse-violet-soft)]">
+                  {row.accuracy}%
+                </td>
               </tr>
             );
           })}

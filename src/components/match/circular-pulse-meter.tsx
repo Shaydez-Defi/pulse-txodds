@@ -42,7 +42,7 @@ export function CircularPulseMeter({
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="font-display text-5xl font-bold">{value}</span>
+          <span className="pulse-score text-5xl text-white">{value}</span>
         </div>
       </div>
       <p

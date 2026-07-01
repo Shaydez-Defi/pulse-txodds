@@ -19,14 +19,39 @@ export function pulseColor(value: number): string {
   const phase = pulsePhase(value);
   switch (phase) {
     case "explosive":
-      return "#9e4545";
+      return "#f97066";
     case "hot":
-      return "#8b4a3a";
+      return "#fb923c";
     case "warming":
-      return "#8a6b38";
+      return "#8b5cf6";
     default:
-      return "#2f6b52";
+      return "#5b5a72";
   }
+}
+
+export function pulseMeterGradient(value: number): string {
+  if (value >= 81) return "linear-gradient(90deg, #8b5cf6 0%, #f97066 100%)";
+  if (value >= 61) return "linear-gradient(90deg, #7c3aed 0%, #fb923c 100%)";
+  if (value >= 31) return "linear-gradient(90deg, #5b21b6 0%, #8b5cf6 100%)";
+  return "#5b21b6";
+}
+
+export function pulseMeterGlow(value: number): string {
+  if (value >= 61) return "0 0 10px rgba(249, 112, 102, 0.45)";
+  return "0 0 8px rgba(124, 58, 237, 0.35)";
+}
+
+export function pulseValueTextColor(value: number): string {
+  if (value >= 81) return "#f97066";
+  if (value >= 61) return "#fb923c";
+  if (value >= 31) return "#a78bfa";
+  return "#6b6678";
+}
+
+export function momentumClass(dir: MomentumDirection): string {
+  if (dir === "up") return "text-[var(--pulse-violet-soft)]";
+  if (dir === "down") return "text-[var(--pulse-coral)]";
+  return "text-[var(--text-muted)]";
 }
 
 export function pulseLabel(phase: PulsePhase): string {

@@ -1,16 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { HeroVideoBackground } from "./hero-video-background";
+import { PulseButton } from "@/components/ui/pulse-button";
 import clsx from "clsx";
 
 const STADIUM_THEMES = [
-  { id: "wembley", label: "Wembley", accent: "from-blue-900/40" },
-  { id: "camp-nou", label: "Camp Nou", accent: "from-red-900/40" },
-  { id: "san-siro", label: "San Siro", accent: "from-red-950/40" },
-  { id: "maracana", label: "Maracanã", accent: "from-green-900/40" },
+  { id: "wembley", label: "Wembley", accent: "from-violet-950/40" },
+  { id: "camp-nou", label: "Camp Nou", accent: "from-purple-950/40" },
+  { id: "san-siro", label: "San Siro", accent: "from-indigo-950/40" },
+  { id: "maracana", label: "Maracanã", accent: "from-violet-900/35" },
   { id: "lusail", label: "Lusail", accent: "from-purple-900/40" },
 ] as const;
 
@@ -30,7 +30,7 @@ export function HeroSection() {
           <motion.p
             initial={false}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-4 text-center text-xs font-medium uppercase tracking-[0.24em] text-white/90 sm:mb-6"
+            className="pulse-eyebrow mb-4 text-center sm:mb-6"
           >
             Live football intelligence
           </motion.p>
@@ -38,15 +38,23 @@ export function HeroSection() {
           <motion.h1
             initial={false}
             animate={{ opacity: 1, y: 0 }}
-            className="font-display mx-auto max-w-4xl text-center text-[2rem] font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-7xl"
+            className="font-headline mx-auto max-w-4xl text-center text-[2.5rem] leading-[0.95] tracking-wide text-white sm:text-6xl lg:text-8xl"
           >
-            Pulse — The pulse of the game. Live.
+            Pulse
           </motion.h1>
 
           <motion.p
             initial={false}
             animate={{ opacity: 1, y: 0 }}
-            className="mx-auto mt-4 max-w-xl text-center text-base leading-relaxed text-white/70 sm:mt-6 sm:text-lg"
+            className="font-editorial mx-auto mt-3 text-lg font-medium tracking-wide text-white/90 sm:text-xl"
+          >
+            The pulse of the game. Live.
+          </motion.p>
+
+          <motion.p
+            initial={false}
+            animate={{ opacity: 1, y: 0 }}
+            className="mx-auto mt-4 max-w-xl text-center text-base leading-relaxed text-white/65 sm:mt-6 sm:text-lg"
           >
             Live football intelligence powered by real-time match data. See momentum
             shift before everyone else.
@@ -55,22 +63,14 @@ export function HeroSection() {
           <motion.div
             initial={false}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-8 flex justify-center sm:mt-10"
+            className="mt-8 flex justify-center gap-4 sm:mt-10"
           >
-            <div className="flex gap-4 justify-center">
-              <Link
-                href="/home"
-                className="rounded-full bg-[#22C55E] px-8 py-3 font-bold text-black shadow-lg shadow-black/40 transition-all hover:scale-[1.02] hover:bg-[#16A34A] active:scale-[0.98]"
-              >
-                Enter Pulse
-              </Link>
-              <Link
-                href="/match/demo"
-                className="rounded-full border border-white/60 px-8 py-3 font-semibold text-white transition-all hover:border-white hover:bg-white/5"
-              >
-                Explore Demo
-              </Link>
-            </div>
+            <PulseButton href="/home" variant="primary">
+              Enter Pulse
+            </PulseButton>
+            <PulseButton href="/match/demo" variant="secondary">
+              Explore Demo
+            </PulseButton>
           </motion.div>
         </div>
       </div>
@@ -83,10 +83,10 @@ export function HeroSection() {
               type="button"
               onClick={() => setActiveStadium(stadium.id)}
               className={clsx(
-                "shrink-0 cursor-pointer rounded-full border px-4 py-1.5 text-sm transition-all",
+                "shrink-0 cursor-pointer rounded-full border px-4 py-1.5 font-editorial text-sm transition-all",
                 activeStadium === stadium.id
-                  ? "border-white/60 text-white"
-                  : "border-white/20 text-white/70 hover:border-white/60"
+                  ? "border-[var(--pulse-purple)]/60 bg-[var(--pulse-purple)]/15 text-white shadow-[0_0_16px_var(--glow-purple)]"
+                  : "border-white/20 text-white/60 hover:border-white/40 hover:text-white"
               )}
             >
               {stadium.label}

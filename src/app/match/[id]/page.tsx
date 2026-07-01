@@ -9,7 +9,7 @@ export default async function MatchPage({
   const fixtureId = Number.parseInt(id, 10);
 
   return (
-    <section className="px-6 py-16">
+    <section className="pulse-page-bg pulse-page">
       <div className="mx-auto max-w-7xl">
         <MatchDetailView fixtureId={fixtureId} />
       </div>

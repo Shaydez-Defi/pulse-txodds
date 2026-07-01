@@ -31,7 +31,8 @@ export function FanChatPlaceholder() {
     <GlassCard variant="primary" className="flex min-h-[28rem] flex-col">
       <div className="mb-4 flex items-center justify-between border-b border-white/8 pb-4">
         <div>
-          <p className="text-xs uppercase tracking-[0.24em] text-[var(--accent-green)]">
+          <p className="pulse-eyebrow flex items-center gap-2 text-[var(--pulse-coral)]">
+            <span className="pulse-live-dot" />
             Live
           </p>
           <p className="mt-1 font-medium">Match room</p>

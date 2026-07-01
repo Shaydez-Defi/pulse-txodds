@@ -17,7 +17,7 @@ export function AuroraOrbs() {
       />
       <div
         className="absolute left-1/2 top-1/3 h-64 w-64 -translate-x-1/2 rounded-full blur-[90px] opacity-40"
-        style={{ background: "rgba(47, 107, 82, 0.12)" }}
+        style={{ background: "rgba(124, 58, 237, 0.1)" }}
       />
     </div>
   );

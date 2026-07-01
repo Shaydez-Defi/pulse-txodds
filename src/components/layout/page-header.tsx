@@ -9,14 +9,14 @@ export function PageHeader({
 }) {
   return (
     <div className="mb-12">
-      <p className="text-xs font-bold uppercase tracking-widest text-white/40">
-        {eyebrow}
-      </p>
-      <h1 className="font-display mt-3 text-4xl font-bold tracking-tight">
+      <p className="pulse-eyebrow">{eyebrow}</p>
+      <h1 className="font-headline mt-4 text-5xl tracking-wide text-white md:text-6xl">
         {title}
       </h1>
       {description && (
-        <p className="mt-4 max-w-2xl text-[var(--text-secondary)]">{description}</p>
+        <p className="mt-5 max-w-2xl text-base leading-relaxed text-[var(--text-secondary)]">
+          {description}
+        </p>
       )}
     </div>
   );

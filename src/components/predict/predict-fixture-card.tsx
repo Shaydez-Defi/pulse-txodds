@@ -7,6 +7,7 @@ import { usePredictionsStore } from "@/stores/predictions-store";
 import { useAuthModalStore } from "@/stores/auth-modal-store";
 import { useIsAuthenticated } from "@/hooks/use-is-authenticated";
 import { GlassCard } from "@/components/ui/glass-card";
+import { PulseButton } from "@/components/ui/pulse-button";
 
 export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
   const { publicKey } = useWallet();
@@ -71,10 +72,8 @@ export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
     <GlassCard variant="primary">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-xs uppercase tracking-widest text-[var(--text-muted)]">
-            {match.competition}
-          </p>
-          <h3 className="font-display mt-2 text-xl font-semibold">
+          <p className="pulse-eyebrow">{match.competition}</p>
+          <h3 className="font-editorial mt-3 text-xl font-semibold">
             {match.homeTeam} vs {match.awayTeam}
           </h3>
           <p className="mt-1 text-sm text-[var(--text-secondary)]">{kickoff}</p>
@@ -151,22 +150,18 @@ export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
       </label>
 
       <div className="mt-8 flex flex-wrap gap-3">
-        <button
+        <PulseButton
           type="button"
           onClick={submit}
           disabled={submitted}
-          className="rounded-full bg-white px-6 py-2.5 text-sm font-medium text-black disabled:opacity-40"
+          variant="primary"
         >
           {submitted ? "Prediction saved" : "Submit prediction"}
-        </button>
+        </PulseButton>
         {match.status === "live" && submitted && predictionId && (
-          <button
-            type="button"
-            onClick={handleClaimLive}
-            className="rounded-full border border-white/12 px-6 py-2.5 text-sm"
-          >
+          <PulseButton type="button" onClick={handleClaimLive} variant="secondary">
             I called it
-          </button>
+          </PulseButton>
         )}
       </div>
     </GlassCard>

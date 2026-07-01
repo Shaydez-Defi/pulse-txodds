@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, Space_Grotesk } from "next/font/google";
+import { Bebas_Neue, DM_Sans, Sora, Space_Grotesk } from "next/font/google";
 import { AppProviders } from "@/providers/app-providers";
 import { AppShell } from "@/components/layout/app-shell";
 import "./globals.css";
@@ -10,6 +10,18 @@ const spaceGrotesk = Space_Grotesk({
   weight: ["500", "600", "700"],
 });
 
+const bebasNeue = Bebas_Neue({
+  variable: "--font-bebas",
+  subsets: ["latin"],
+  weight: ["400"],
+});
+
+const sora = Sora({
+  variable: "--font-sora",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],
@@ -18,7 +30,7 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: "Pulse — Football Intelligence",
-  description: "Live match intelligence powered by TxLINE",
+  description: "The pulse of the game. Live.",
 };
 
 export default function RootLayout({
@@ -29,34 +41,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${dmSans.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${bebasNeue.variable} ${sora.variable} ${dmSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full" style={{ background: "#08090f" }}>
-        <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-          <div
-            style={{
-              position: "absolute",
-              top: "-100px",
-              left: "-100px",
-              width: "600px",
-              height: "600px",
-              borderRadius: "50%",
-              background: "rgba(34, 197, 94, 0.06)",
-              filter: "blur(120px)",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              bottom: "-100px",
-              right: "-100px",
-              width: "500px",
-              height: "500px",
-              borderRadius: "50%",
-              background: "rgba(59, 130, 246, 0.05)",
-              filter: "blur(120px)",
-            }}
-          />
+      <body className="min-h-full bg-[var(--bg-base)] text-[var(--text-primary)]">
+        <div className="pulse-ambient pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden>
+          <div className="pulse-orb pulse-orb-violet" />
+          <div className="pulse-orb pulse-orb-coral" />
         </div>
         <div className="relative z-10">
           <AppProviders>

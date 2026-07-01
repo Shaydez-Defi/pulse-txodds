@@ -17,7 +17,7 @@ export function GlassCard({
     <div
       className={clsx(
         "glass-card rounded-2xl",
-        variant === "primary" ? "glass-primary p-8" : "glass-secondary p-4",
+        variant === "primary" ? "glass-primary p-8 md:p-10" : "glass-secondary p-5 md:p-6",
         className
       )}
       style={style}

@@ -18,10 +18,7 @@ export function AnticipationBanner({
           exit={{ opacity: 0, y: -8 }}
           className="glass-alert rounded-xl px-6 py-4"
         >
-          <p className="text-sm text-[#d4b0a8]">
-            <span className="mr-2 inline-block animate-pulse">⚠️</span>
-            {message}
-          </p>
+          <p className="font-editorial text-sm text-[#fecaca]">{message}</p>
         </motion.div>
       )}
     </AnimatePresence>

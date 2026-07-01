@@ -9,7 +9,7 @@ export default function PredictPage() {
   const upcoming = (data ?? []).filter((m) => m.status !== "finished");
 
   return (
-    <section className="px-6 py-16">
+    <section className="pulse-page-bg pulse-page">
       <div className="mx-auto max-w-4xl">
         <PageHeader
           eyebrow="Predict"
