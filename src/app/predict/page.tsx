@@ -9,15 +9,17 @@ export default function PredictPage() {
   const upcoming = (data ?? []).filter((m) => m.status !== "finished");
 
   return (
-    <div className="brutal-stack w-full">
+    <div className="editorial-stack w-full">
       <PageHeader
         eyebrow="Predict"
         title="Call the match"
         description="Submit predictions before kickoff. Claim live calls during the match."
       />
-      {upcoming.map((match) => (
-        <PredictFixtureCard key={match.fixtureId} match={match} />
-      ))}
+      <div className="content-pad flex w-full flex-col gap-6">
+        {upcoming.map((match) => (
+          <PredictFixtureCard key={match.fixtureId} match={match} />
+        ))}
+      </div>
     </div>
   );
 }

@@ -187,27 +187,27 @@ export default function HomeDashboardPage() {
   }, [fetchNarrative]);
 
   return (
-    <div className="brutal-stack w-full">
-      <section className="relative w-full bg-brand-crimson">
+    <div className="editorial-stack w-full">
+      <section className="relative mx-0 my-0 w-full rounded-none bg-brand-crimson">
         <div className="absolute bottom-0 left-0 top-0 w-16 bg-brand-purple">
           <div
             className="absolute bottom-0 left-0 w-full bg-brand-lime"
             style={{ height: `${FEATURED.pulse}%` }}
           />
         </div>
-        <div className="relative p-8 md:p-12">
+        <div className="relative mx-0 my-0 w-full space-y-6 p-8 md:p-12">
           <p className="text-sm font-bold uppercase tracking-widest text-white">
             Featured · Live · {FEATURED.minute}
           </p>
-          <p className="mt-4 text-[18vh] font-black leading-none tracking-tighter text-white">
+          <p className="text-[18vh] font-black leading-none tracking-tighter text-white">
             {FEATURED.homeScore} - {FEATURED.awayScore}
           </p>
-          <p className="mt-4 text-4xl font-black uppercase text-white md:text-6xl">
+          <p className="text-4xl font-black uppercase text-white md:text-6xl">
             {FEATURED.homeTeam} vs {FEATURED.awayTeam}
           </p>
 
-          <div className="mt-8 w-full bg-base-black p-8">
-            <p className="text-xs font-bold uppercase tracking-widest text-brand-lime">
+          <div className="space-y-4 rounded-xl border-0 border-l-8 border-brand-purple bg-base-gray p-6 shadow-none dark:bg-dark-gray">
+            <p className="text-xs font-bold uppercase tracking-widest text-brand-purple">
               Pulse reads the match
             </p>
             <AnimatePresence mode="wait">
@@ -216,14 +216,14 @@ export default function HomeDashboardPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="mt-4 text-2xl font-bold leading-tight text-white md:text-3xl"
+                className="text-2xl font-bold leading-relaxed text-text-light dark:text-text-dark md:text-3xl"
               >
                 {narrative}
               </motion.p>
             </AnimatePresence>
           </div>
 
-          <div className="mt-0 grid w-full grid-cols-3 gap-0 border-0 border-t-4 border-base-black">
+          <div className="flex w-full flex-col gap-4 md:flex-row">
             <Stat label="Possession" value={`${FEATURED.possessionHome}% / ${FEATURED.possessionAway}%`} />
             <Stat label="Danger" value={`${FEATURED.dangerousAttacks}`} />
             <Stat label="Corners" value={`${FEATURED.corners}`} />
@@ -231,73 +231,91 @@ export default function HomeDashboardPage() {
 
           <Link
             href="/match/demo"
-            className="mt-0 inline-block w-full bg-brand-lime py-6 text-center text-2xl font-bold text-base-black"
+            className="mx-0 my-0 block w-full rounded-xl bg-brand-lime py-6 text-center text-2xl font-bold text-base-black transition-opacity hover:opacity-90"
           >
             Watch Match
           </Link>
         </div>
       </section>
 
-      <section className="w-full bg-base-black p-8 md:p-12">
+      <section className="content-pad flex w-full flex-col gap-8">
         <h2 className="text-sm font-bold uppercase tracking-widest text-brand-lime">
           Live across all matches
         </h2>
-        <div className="brutal-stack mt-0 w-full">
+        <div className="flex w-full flex-col gap-6">
           {LIVE_ALERTS.map((alert) => (
-            <div key={alert.match} className="w-full border-0 border-t-4 border-brand-purple p-8">
-              <p className="text-4xl font-bold leading-none tracking-tighter text-base-offwhite">
+            <div
+              key={alert.match}
+              className="rounded-xl border-0 border-l-8 border-brand-purple bg-base-gray p-6 shadow-none dark:bg-dark-gray"
+            >
+              <p className="text-2xl font-bold leading-none tracking-tight text-text-light dark:text-text-dark md:text-4xl">
                 {alert.match} · {alert.minute}
               </p>
-              <p className="text-4xl font-bold leading-tight text-base-offwhite">{alert.text}</p>
+              <p className="mt-4 text-xl font-bold leading-relaxed text-text-light dark:text-text-dark md:text-2xl">
+                {alert.text}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="brutal-stack w-full">
-        <div className="w-full bg-base-offwhite p-8">
-          <h2 className="text-4xl font-black uppercase tracking-tighter text-base-black">
-            What makes Pulse different
-          </h2>
-        </div>
+      <section className="content-pad flex w-full flex-col gap-8">
+        <h2 className="text-4xl font-black uppercase tracking-tighter text-text-light dark:text-text-dark">
+          What makes Pulse different
+        </h2>
         {FEATURES.map((feature) => (
-          <div key={feature.title} className="w-full border-0 border-t-4 border-base-black bg-brand-purple p-8">
-            <h3 className="text-3xl font-black uppercase text-base-black">{feature.title}</h3>
-            <p className="mt-4 text-lg font-bold text-base-black">{feature.description}</p>
+          <div
+            key={feature.title}
+            className="rounded-xl border-0 border-l-8 border-brand-purple bg-base-gray p-6 shadow-none dark:bg-dark-gray"
+          >
+            <h3 className="text-3xl font-black uppercase text-text-light dark:text-text-dark">
+              {feature.title}
+            </h3>
+            <p className="mt-4 text-lg font-bold leading-relaxed text-text-light dark:text-text-dark">
+              {feature.description}
+            </p>
           </div>
         ))}
       </section>
 
-      <section className="brutal-stack w-full">
-        <div className="w-full bg-brand-purple p-8">
+      <section className="flex w-full flex-col gap-8">
+        <div className="mx-0 my-0 w-full rounded-none bg-brand-purple p-8">
           <h2 className="text-4xl font-black uppercase text-base-black">Live now</h2>
         </div>
-        {LIVE_MATCHES.map((match) => (
-          <MatchCard key={match.fixtureId} match={match} />
-        ))}
-        <Link
-          href="/matches"
-          className="block w-full bg-brand-lime py-8 text-center text-xl font-bold text-base-black"
-        >
-          View All Matches
-        </Link>
+        <div className="content-pad flex w-full flex-col gap-6">
+          {LIVE_MATCHES.map((match) => (
+            <MatchCard key={match.fixtureId} match={match} />
+          ))}
+        </div>
+        <div className="content-pad w-full">
+          <Link
+            href="/matches"
+            className="mx-0 my-0 block w-full rounded-xl bg-brand-lime py-8 text-center text-xl font-bold text-base-black transition-opacity hover:opacity-90"
+          >
+            View All Matches
+          </Link>
+        </div>
       </section>
 
-      <section className="brutal-stack w-full">
-        <div className="w-full bg-base-offwhite p-8">
-          <h2 className="text-4xl font-black uppercase text-base-black">Coming up</h2>
+      <section className="content-pad flex w-full flex-col gap-8">
+        <h2 className="text-4xl font-black uppercase text-text-light dark:text-text-dark">
+          Coming up
+        </h2>
+        <div className="flex w-full flex-col gap-4">
+          {UPCOMING.map((fixture) => (
+            <div
+              key={`${fixture.home}-${fixture.away}`}
+              className="flex w-full items-center justify-between rounded-xl border-0 bg-base-gray p-6 shadow-none dark:bg-dark-gray"
+            >
+              <p className="text-2xl font-black uppercase text-text-light dark:text-text-dark md:text-4xl">
+                {fixture.home} vs {fixture.away}
+              </p>
+              <p className="text-lg font-bold text-text-light dark:text-text-dark">
+                {fixture.kickoff}
+              </p>
+            </div>
+          ))}
         </div>
-        {UPCOMING.map((fixture) => (
-          <div
-            key={`${fixture.home}-${fixture.away}`}
-            className="flex w-full items-center justify-between border-0 border-t-4 border-base-black bg-base-offwhite p-8"
-          >
-            <p className="text-2xl font-black uppercase text-base-black md:text-4xl">
-              {fixture.home} vs {fixture.away}
-            </p>
-            <p className="text-lg font-bold text-base-black">{fixture.kickoff}</p>
-          </div>
-        ))}
       </section>
     </div>
   );
@@ -305,9 +323,12 @@ export default function HomeDashboardPage() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="border-0 border-r-4 border-base-black bg-base-offwhite p-6 last:border-r-0">
-      <p className="text-xs font-bold uppercase tracking-widest text-base-black">{label}</p>
-      <p className="mt-2 text-2xl font-black text-base-black">{value}</p>
+    <div className="relative flex flex-1 flex-col items-center overflow-hidden rounded-xl border-0 bg-base-gray p-8 text-center shadow-none dark:bg-dark-gray">
+      <span className="absolute left-0 top-0 h-8 w-2 bg-brand-crimson" aria-hidden />
+      <p className="text-xs font-bold uppercase tracking-widest text-text-light dark:text-text-dark">
+        {label}
+      </p>
+      <p className="mt-2 text-6xl font-black text-text-light dark:text-text-dark">{value}</p>
     </div>
   );
 }

@@ -55,14 +55,14 @@ export function NftMatchCardsGrid() {
   const tierBg = {
     Legendary: "bg-brand-crimson text-white",
     Epic: "bg-brand-purple text-base-black",
-    Rare: "bg-base-offwhite text-base-black",
+    Rare: "bg-base-gray text-text-light dark:bg-dark-gray dark:text-text-dark",
   };
 
   return (
-    <div className="brutal-stack w-full">
+    <div className="flex flex-col gap-6">
       {cards.map((card) => (
-        <article key={card.id} className="brutal-stack w-full border-0 border-t-4 border-base-black">
-          <div className={`w-full p-8 ${tierBg[card.tier]}`}>
+        <article key={card.id} className="overflow-hidden rounded-xl border-0 bg-base-gray shadow-none dark:bg-dark-gray">
+          <div className={`mx-0 my-0 w-full rounded-none p-8 ${tierBg[card.tier]}`}>
             <p className="text-xs font-bold uppercase tracking-widest">{card.tier}</p>
             <p className="mt-4 text-[15vw] font-black leading-none tracking-tighter md:text-8xl">
               {card.pulseScore}
@@ -70,24 +70,28 @@ export function NftMatchCardsGrid() {
             <h4 className="mt-6 text-3xl font-black uppercase">{card.title}</h4>
             <p className="mt-2 text-lg font-bold">{card.player}</p>
           </div>
-          <div className="w-full bg-base-offwhite p-8">
-            <p className="font-bold text-base-black">Fixture: {card.match}</p>
-            <p className="font-bold text-base-black">Trigger: Pulse Peak &gt; 80%</p>
+          <div className="space-y-6 p-8">
+            <p className="font-bold text-text-light dark:text-text-dark">
+              Fixture: {card.match}
+            </p>
+            <p className="font-bold text-text-light dark:text-text-dark">
+              Trigger: Pulse Peak &gt; 80%
+            </p>
             {!publicKey ? (
               <button
                 disabled
-                className="mt-6 w-full border-0 border-t-4 border-base-black bg-base-black py-4 text-xs font-bold uppercase text-base-offwhite"
+                className="mt-2 w-full rounded-xl bg-base-black px-8 py-4 text-xs font-bold uppercase text-base-offwhite dark:bg-base-offwhite dark:text-base-black"
               >
                 Connect Wallet to Mint
               </button>
             ) : card.minted ? (
-              <div className="mt-6 w-full border-0 border-t-4 border-base-black bg-brand-lime py-4 text-center text-xs font-bold uppercase text-base-black">
+              <div className="w-full rounded-xl bg-brand-lime py-4 text-center text-xs font-bold uppercase text-base-black">
                 Minted
               </div>
             ) : (
               <button
                 onClick={() => mint(card.id)}
-                className="mt-6 w-full border-0 border-t-4 border-base-black bg-brand-lime py-4 text-sm font-bold uppercase text-base-black"
+                className="w-full rounded-xl bg-brand-lime py-4 text-sm font-bold uppercase text-base-black transition-opacity hover:opacity-90"
               >
                 Mint NFT Card
               </button>

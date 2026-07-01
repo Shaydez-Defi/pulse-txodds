@@ -10,8 +10,8 @@ export function AnticipationBanner({
   if (!show) return null;
 
   return (
-    <section className="w-full bg-base-black p-8 md:p-12">
-      <p className="text-2xl font-bold leading-tight text-base-offwhite md:text-4xl">
+    <section className="rounded-xl border-0 border-l-8 border-brand-purple bg-base-gray p-6 shadow-none dark:bg-dark-gray md:p-8">
+      <p className="text-2xl font-bold leading-relaxed text-text-light dark:text-text-dark md:text-4xl">
         {message}
       </p>
     </section>

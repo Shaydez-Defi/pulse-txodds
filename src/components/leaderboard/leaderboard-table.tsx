@@ -45,8 +45,8 @@ export function LeaderboardTable() {
   const myWallet = publicKey?.toBase58();
 
   return (
-    <div className="brutal-stack w-full">
-      <div className="grid w-full grid-cols-5 gap-0 bg-base-black p-4 text-xs font-bold uppercase text-brand-lime">
+    <div className="flex flex-col gap-6">
+      <div className="grid grid-cols-5 gap-4 rounded-xl border-0 bg-base-black p-6 text-xs font-bold uppercase text-brand-lime shadow-none">
         <span>Rank</span>
         <span>Wallet</span>
         <span>Predictions</span>
@@ -59,8 +59,10 @@ export function LeaderboardTable() {
           <div
             key={row.rank}
             className={clsx(
-              "grid w-full grid-cols-5 gap-0 border-0 border-t-4 border-base-black p-6 font-bold",
-              isMe ? "bg-brand-lime text-base-black" : "bg-base-offwhite text-base-black"
+              "mb-4 grid grid-cols-5 gap-4 rounded-xl border-0 p-6 font-bold shadow-none",
+              isMe
+                ? "bg-brand-lime text-base-black"
+                : "bg-base-gray text-text-light dark:bg-dark-gray dark:text-text-dark"
             )}
           >
             <span className="text-3xl font-black">{row.rank}</span>

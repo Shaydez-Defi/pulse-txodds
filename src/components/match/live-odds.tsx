@@ -12,16 +12,21 @@ export function LiveOdds({ odds }: { odds: OddsTriple | null }) {
   ];
 
   return (
-    <div className="brutal-stack w-full">
-      <h3 className="text-2xl font-black uppercase text-base-black">Win probability</h3>
+    <div className="flex flex-col gap-6">
+      <h3 className="text-2xl font-black uppercase text-text-light dark:text-text-dark">
+        Win probability
+      </h3>
       {rows.map((row) => (
-        <div key={row.label} className="w-full border-0 border-t-4 border-base-black pt-6">
-          <div className="mb-2 flex justify-between font-bold text-base-black">
+        <div key={row.label} className="rounded-xl border-0 bg-base-offwhite p-6 shadow-none dark:bg-base-black">
+          <div className="mb-3 flex justify-between font-bold text-text-light dark:text-text-dark">
             <span>{row.label}</span>
             <span>{row.value.toFixed(1)}%</span>
           </div>
-          <div className="h-8 w-full bg-base-black">
-            <div className="h-full bg-brand-purple" style={{ width: `${row.value}%` }} />
+          <div className="h-4 w-full bg-base-gray dark:bg-dark-gray">
+            <div
+              className="h-4 bg-brand-purple"
+              style={{ width: `${row.value}%` }}
+            />
           </div>
         </div>
       ))}

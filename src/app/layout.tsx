@@ -30,7 +30,7 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: "Pulse — The pulse of the game. Live.",
-  description: "Brutalist editorial football intelligence.",
+  description: "Premium editorial football intelligence.",
 };
 
 export default function RootLayout({
@@ -41,9 +41,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${spaceGrotesk.variable} ${bebasNeue.variable} ${sora.variable} ${dmSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full w-full overflow-x-hidden bg-base-offwhite text-base-black">
+      <body className="min-h-full w-full overflow-x-hidden bg-base-offwhite text-text-light dark:bg-base-black dark:text-text-dark">
         <AppProviders>
           <AppShell>{children}</AppShell>
         </AppProviders>

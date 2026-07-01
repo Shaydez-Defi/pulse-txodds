@@ -14,33 +14,40 @@ const MOCK_STATS = [
 
 export function TrophyCabinetView() {
   return (
-    <div className="brutal-stack w-full">
-      <div className="grid w-full grid-cols-3 gap-0">
+    <div className="editorial-stack w-full">
+      <div className="flex w-full justify-between gap-4">
         {MOCK_STATS.map((stat) => (
           <div
             key={stat.label}
-            className="border-0 border-r-4 border-base-black bg-base-offwhite p-8 text-center last:border-r-0"
+            className="relative flex flex-1 flex-col items-center overflow-hidden rounded-xl border-0 bg-base-gray p-8 text-center shadow-none dark:bg-dark-gray"
           >
-            <p className="text-5xl font-black text-base-black">{stat.value}</p>
-            <p className="mt-2 text-xs font-bold uppercase text-base-black">{stat.label}</p>
+            <span className="absolute left-0 top-0 h-8 w-2 bg-brand-crimson" aria-hidden />
+            <p className="text-6xl font-black text-text-light dark:text-text-dark">{stat.value}</p>
+            <p className="mt-2 text-xs font-bold uppercase text-text-light dark:text-text-dark">
+              {stat.label}
+            </p>
           </div>
         ))}
       </div>
 
-      <div className="w-full border-0 border-t-4 border-base-black bg-base-offwhite p-8">
-        <p className="text-sm font-bold uppercase tracking-widest text-base-black">Badges</p>
-        <div className="brutal-stack mt-0 w-full">
+      <div className="rounded-xl border-0 bg-base-gray p-8 shadow-none dark:bg-dark-gray">
+        <p className="text-sm font-bold uppercase tracking-widest text-text-light dark:text-text-dark">
+          Badges
+        </p>
+        <div className="mt-6 flex flex-col gap-4">
           {MOCK_BADGES.map((badge) => (
             <div
               key={badge.id}
-              className="w-full border-0 border-l-[20px] border-brand-lime border-t-4 border-base-black bg-base-offwhite p-8"
+              className="rounded-xl border-0 border-l-8 border-brand-purple bg-base-gray p-6 shadow-none dark:bg-dark-gray"
             >
-              <p className="text-2xl font-black uppercase text-base-black">{badge.label}</p>
-              <p className="mt-2 font-bold text-base-black">{badge.detail}</p>
+              <p className="text-2xl font-black uppercase text-text-light dark:text-text-dark">
+                {badge.label}
+              </p>
+              <p className="mt-2 font-bold text-text-light dark:text-text-dark">{badge.detail}</p>
             </div>
           ))}
         </div>
-        <p className="mt-8 text-xs font-bold uppercase text-base-black">
+        <p className="mt-8 text-xs font-bold uppercase text-text-light dark:text-text-dark">
           Placeholder — NFT trophies coming later.
         </p>
       </div>

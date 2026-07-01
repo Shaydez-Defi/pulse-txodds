@@ -9,7 +9,7 @@ export default async function MatchPage({
   const fixtureId = Number.parseInt(id, 10);
 
   return (
-    <div className="brutal-stack w-full">
+    <div className="w-full">
       <MatchDetailView fixtureId={fixtureId} />
     </div>
   );

@@ -20,13 +20,15 @@ export function PressureHeatmap({ zones }: { zones: Zone[] }) {
   }, [zones]);
 
   return (
-    <div className="brutal-stack w-full">
-      <h3 className="text-2xl font-black uppercase text-base-black">Pressure heatmap</h3>
-      <div className="relative aspect-[68/105] w-full border-0 border-t-4 border-base-black bg-base-black">
+    <div className="flex flex-col gap-6">
+      <h3 className="text-2xl font-black uppercase text-text-light dark:text-text-dark">
+        Pressure heatmap
+      </h3>
+      <div className="relative aspect-[68/105] w-full overflow-hidden rounded-xl bg-base-black">
         <svg viewBox="0 0 68 105" className="h-full w-full">
-          <rect x="2" y="2" width="64" height="101" fill="none" stroke="#F6F7F8" strokeWidth="1" />
-          <line x1="34" y1="2" x2="34" y2="103" stroke="#F6F7F8" strokeWidth="0.5" />
-          <circle cx="34" cy="52.5" r="8" fill="none" stroke="#F6F7F8" strokeWidth="0.5" />
+          <rect x="2" y="2" width="64" height="101" fill="none" stroke="#E5E7EB" strokeWidth="1" />
+          <line x1="34" y1="2" x2="34" y2="103" stroke="#E5E7EB" strokeWidth="0.5" />
+          <circle cx="34" cy="52.5" r="8" fill="none" stroke="#E5E7EB" strokeWidth="0.5" />
           {active.map((zone, i) => (
             <rect
               key={i}
@@ -34,7 +36,7 @@ export function PressureHeatmap({ zones }: { zones: Zone[] }) {
               y={(zone.y / 100) * 105 - 4}
               width={8 + zone.intensity * 12}
               height={8 + zone.intensity * 12}
-              fill="#F84E3A"
+              fill="#E11D48"
               opacity={zone.intensity}
             />
           ))}

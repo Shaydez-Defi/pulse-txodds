@@ -4,17 +4,19 @@ import type { StoryCard } from "@/lib/types";
 
 export function StoryCards({ stories }: { stories: StoryCard[] }) {
   return (
-    <div className="brutal-stack w-full">
-      <p className="text-sm font-bold uppercase tracking-widest text-brand-lime">
+    <div className="flex flex-col gap-6">
+      <p className="text-sm font-bold uppercase tracking-widest text-brand-purple">
         Match narrative
       </p>
       {stories.map((story) => (
-        <p
+        <div
           key={story.id}
-          className="mt-0 w-full border-0 border-t-4 border-brand-purple pt-8 text-4xl font-bold leading-tight text-white"
+          className="rounded-xl border-0 border-l-8 border-brand-purple bg-base-gray p-6 shadow-none dark:bg-dark-gray"
         >
-          {story.text}
-        </p>
+          <p className="text-2xl font-bold leading-relaxed text-text-light dark:text-text-dark md:text-4xl">
+            {story.text}
+          </p>
+        </div>
       ))}
     </div>
   );

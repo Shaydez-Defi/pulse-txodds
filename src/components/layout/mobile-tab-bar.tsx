@@ -33,7 +33,7 @@ export function MobileTabBar() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 z-50 flex h-16 w-full items-center justify-around border-0 bg-base-black lg:hidden">
+    <nav className="fixed bottom-0 z-50 flex h-16 w-full items-center justify-around border-t border-base-gray bg-base-offwhite dark:border-dark-gray dark:bg-base-black lg:hidden">
       {TABS.map((tab) => {
         const active = isActive(pathname, tab.href);
         const Icon = tab.icon;
@@ -42,8 +42,10 @@ export function MobileTabBar() {
             key={tab.label}
             href={tab.href}
             className={clsx(
-              "flex min-w-0 flex-1 flex-col items-center justify-center gap-0 border-0 px-1 py-2",
-              active ? "text-brand-lime" : "text-base-offwhite"
+              "flex min-w-0 flex-1 flex-col items-center justify-center gap-1 px-1 py-2",
+              active
+                ? "text-brand-lime"
+                : "text-text-light dark:text-text-dark"
             )}
           >
             <Icon active={active} />

@@ -10,6 +10,7 @@ import { useAuthStore } from "@/stores/auth-store";
 import { useAuthModalStore } from "@/stores/auth-modal-store";
 import { useIsAuthenticated } from "@/hooks/use-is-authenticated";
 import { PulseLogo } from "@/components/layout/pulse-logo";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 const DESKTOP_NAV = [
   { href: "/home", label: "Home" },
@@ -72,12 +73,12 @@ export function BrutalistHeader() {
   }
 
   return (
-    <header className="fixed top-0 z-50 flex h-12 w-full items-center justify-between border-0 bg-base-black px-4 text-base-offwhite md:px-8">
+    <header className="fixed top-0 z-50 flex h-14 w-full items-center justify-between bg-base-black px-4 dark:bg-dark-gray md:h-20 md:px-8 lg:h-24">
       <Link href="/home" className="flex shrink-0 items-center">
         <PulseLogo light />
       </Link>
 
-      <nav className="hidden flex-1 items-center justify-center gap-0 md:flex">
+      <nav className="hidden h-full items-center gap-8 md:flex md:gap-12">
         {DESKTOP_NAV.map((item) => {
           const active = isNavActive(pathname, item.href);
           return (
@@ -85,8 +86,8 @@ export function BrutalistHeader() {
               key={item.href}
               href={item.href}
               className={clsx(
-                "px-4 py-2 text-xs font-bold uppercase tracking-tight",
-                active ? "bg-brand-lime text-base-black" : "text-base-offwhite hover:bg-brand-purple hover:text-base-black"
+                "flex h-full items-center text-sm font-bold uppercase tracking-wide transition-colors md:text-base",
+                active ? "text-white" : "text-white/80 hover:text-white"
               )}
             >
               {item.label}
@@ -95,59 +96,63 @@ export function BrutalistHeader() {
         })}
       </nav>
 
-      <div className="relative shrink-0" ref={menuRef}>
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          className="flex h-8 items-center border-0 bg-base-offwhite px-3 text-xs font-bold uppercase text-base-black"
-          aria-expanded={open}
-          aria-haspopup="menu"
-        >
-          {initial}
-        </button>
+      <div className="flex shrink-0 items-center gap-4 md:gap-6">
+        <ThemeToggle />
 
-        {open && (
-          <div
-            role="menu"
-            className="absolute right-0 top-full z-[60] mt-2 w-40 border-0 bg-base-offwhite text-base-black shadow-none"
+        <div className="relative" ref={menuRef}>
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold uppercase text-white/80 transition-colors hover:bg-white/10 hover:text-white md:h-11 md:w-11 md:text-base"
+            aria-expanded={open}
+            aria-haspopup="menu"
           >
-            <p className="border-0 border-b-4 border-base-black px-3 py-2 text-[10px] font-bold uppercase">
-              {displayName}
-            </p>
-            {!isAuthenticated && (
+            {initial}
+          </button>
+
+          {open && (
+            <div
+              role="menu"
+              className="absolute right-0 top-full z-[60] mt-2 w-44 overflow-hidden rounded-xl border border-base-gray bg-base-offwhite text-text-light shadow-none dark:border-dark-gray dark:bg-dark-gray dark:text-text-dark"
+            >
+              <p className="border-b border-base-gray px-4 py-3 text-[10px] font-semibold uppercase dark:border-dark-gray">
+                {displayName}
+              </p>
+              {!isAuthenticated && (
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setOpen(false);
+                    openAuthModal();
+                  }}
+                  className="block w-full border-b border-base-gray px-4 py-3 text-left text-xs font-semibold uppercase hover:bg-brand-lime hover:text-base-black dark:border-dark-gray"
+                >
+                  Sign In
+                </button>
+              )}
+              {DROPDOWN_LINKS.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  role="menuitem"
+                  onClick={() => setOpen(false)}
+                  className="block border-b border-base-gray px-4 py-3 text-xs font-semibold uppercase hover:bg-base-gray dark:border-dark-gray dark:hover:bg-base-black"
+                >
+                  {item.label}
+                </Link>
+              ))}
               <button
                 type="button"
                 role="menuitem"
-                onClick={() => {
-                  setOpen(false);
-                  openAuthModal();
-                }}
-                className="block w-full border-0 border-b-4 border-base-black px-3 py-3 text-left text-xs font-bold uppercase hover:bg-brand-lime"
+                onClick={handleLogout}
+                className="block w-full px-4 py-3 text-left text-xs font-semibold uppercase hover:bg-brand-crimson hover:text-white"
               >
-                Sign In
+                Logout
               </button>
-            )}
-            {DROPDOWN_LINKS.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                role="menuitem"
-                onClick={() => setOpen(false)}
-                className="block border-0 border-b-4 border-base-black px-3 py-3 text-xs font-bold uppercase hover:bg-brand-purple"
-              >
-                {item.label}
-              </Link>
-            ))}
-            <button
-              type="button"
-              role="menuitem"
-              onClick={handleLogout}
-              className="block w-full border-0 px-3 py-3 text-left text-xs font-bold uppercase hover:bg-brand-crimson hover:text-base-offwhite"
-            >
-              Logout
-            </button>
-          </div>
-        )}
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );

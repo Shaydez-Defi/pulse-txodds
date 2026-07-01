@@ -9,38 +9,50 @@ export function ManOfTheMatch({
   team: string;
 }) {
   return (
-    <section className="brutal-stack w-full">
-      <div className="w-full bg-brand-lime p-8">
+    <section className="overflow-hidden rounded-xl border-0 bg-base-gray shadow-none dark:bg-dark-gray">
+      <div className="mx-0 my-0 w-full rounded-none bg-brand-lime p-8">
         <p className="text-sm font-bold uppercase tracking-widest text-base-black">
           Man of the Match
         </p>
       </div>
-      <div className="flex w-full flex-col items-start border-0 border-t-4 border-base-black bg-base-offwhite p-8 md:flex-row md:items-center">
+      <div className="flex w-full flex-col items-start gap-6 p-8 md:flex-row md:items-center">
         <img
           src={player.photo}
           alt={player.name}
-          className="h-32 w-32 border-0 border-b-4 border-base-black object-cover md:border-b-0 md:border-r-4"
+          className="h-32 w-32 rounded-xl object-cover"
           onError={(e) => {
-            e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(player.name)}&background=9B5DE5&color=1A1A1A&size=128`;
+            e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(player.name)}&background=7C3AED&color=F9FAFB&size=128`;
           }}
         />
-        <div className="flex-1 p-0 md:px-8">
-          <h3 className="mt-6 text-4xl font-black uppercase text-base-black md:mt-0">
+        <div className="flex-1">
+          <h3 className="text-4xl font-black uppercase text-text-light dark:text-text-dark">
             {player.name}
           </h3>
-          <p className="font-bold text-base-black">{team}</p>
-          <div className="mt-6 grid grid-cols-3 gap-0 border-0 border-t-4 border-base-black">
-            <div className="border-0 border-r-4 border-base-black p-4">
-              <p className="text-3xl font-black text-base-black">{player.goals}</p>
-              <p className="text-xs font-bold uppercase">Goals</p>
+          <p className="font-bold text-text-light dark:text-text-dark">{team}</p>
+          <div className="mt-6 grid grid-cols-3 gap-4">
+            <div className="rounded-xl bg-base-offwhite p-4 text-center dark:bg-base-black">
+              <p className="text-3xl font-black text-text-light dark:text-text-dark">
+                {player.goals}
+              </p>
+              <p className="text-xs font-bold uppercase text-text-light dark:text-text-dark">
+                Goals
+              </p>
             </div>
-            <div className="border-0 border-r-4 border-base-black p-4">
-              <p className="text-3xl font-black text-brand-crimson">{player.rating.toFixed(1)}</p>
-              <p className="text-xs font-bold uppercase">Rating</p>
+            <div className="rounded-xl bg-base-offwhite p-4 text-center dark:bg-base-black">
+              <p className="text-3xl font-black text-brand-crimson">
+                {player.rating.toFixed(1)}
+              </p>
+              <p className="text-xs font-bold uppercase text-text-light dark:text-text-dark">
+                Rating
+              </p>
             </div>
-            <div className="p-4">
-              <p className="text-3xl font-black text-base-black">{player.shots}</p>
-              <p className="text-xs font-bold uppercase">Shots</p>
+            <div className="rounded-xl bg-base-offwhite p-4 text-center dark:bg-base-black">
+              <p className="text-3xl font-black text-text-light dark:text-text-dark">
+                {player.shots}
+              </p>
+              <p className="text-xs font-bold uppercase text-text-light dark:text-text-dark">
+                Shots
+              </p>
             </div>
           </div>
         </div>

@@ -14,9 +14,10 @@ type PulseButtonProps = {
 };
 
 const variants = {
-  primary: "bg-brand-lime text-base-black",
-  secondary: "bg-base-black text-base-offwhite",
-  ghost: "bg-brand-purple text-base-black",
+  primary: "bg-brand-lime text-base-black hover:opacity-90",
+  secondary:
+    "bg-base-black text-base-offwhite dark:bg-base-offwhite dark:text-base-black hover:opacity-90",
+  ghost: "bg-brand-purple text-base-black hover:opacity-90",
 };
 
 export function PulseButton({
@@ -29,7 +30,7 @@ export function PulseButton({
   disabled,
 }: PulseButtonProps) {
   const classes = clsx(
-    "inline-flex items-center justify-center border-0 px-8 py-4 text-sm font-bold uppercase tracking-tight",
+    "inline-flex items-center justify-center rounded-xl px-8 py-4 text-sm font-bold uppercase tracking-tight transition-opacity",
     variants[variant],
     disabled && "pointer-events-none opacity-40",
     className

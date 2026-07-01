@@ -35,11 +35,11 @@ export function HeroVideoBackground({ overlayClassName }: HeroVideoBackgroundPro
   }, []);
 
   return (
-    <div className="hero-video-container">
+    <>
       <video
         key={HERO_VIDEO_SRC}
         ref={videoRef}
-        className="hero-video-element"
+        className="absolute inset-0 z-0 h-screen w-full object-cover"
         src={HERO_VIDEO_SRC}
         autoPlay
         muted
@@ -54,6 +54,6 @@ export function HeroVideoBackground({ overlayClassName }: HeroVideoBackgroundPro
         )}
         aria-hidden
       />
-    </div>
+    </>
   );
 }

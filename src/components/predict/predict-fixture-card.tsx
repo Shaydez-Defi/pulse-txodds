@@ -7,6 +7,7 @@ import { usePredictionsStore } from "@/stores/predictions-store";
 import { useAuthModalStore } from "@/stores/auth-modal-store";
 import { useIsAuthenticated } from "@/hooks/use-is-authenticated";
 import { PulseButton } from "@/components/ui/pulse-button";
+import clsx from "clsx";
 
 export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
   const { publicKey } = useWallet();
@@ -68,8 +69,8 @@ export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
   }
 
   return (
-    <article className="brutal-stack w-full border-0 border-t-4 border-base-black">
-      <div className="w-full bg-brand-purple p-8">
+    <article className="overflow-hidden rounded-xl border-0 bg-base-gray shadow-none dark:bg-dark-gray">
+      <div className="mx-0 my-0 w-full rounded-none bg-brand-purple p-8">
         <p className="text-xs font-bold uppercase tracking-widest text-base-black">
           {match.competition}
         </p>
@@ -79,10 +80,12 @@ export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
         <p className="mt-2 font-bold text-base-black">{kickoff}</p>
       </div>
 
-      <div className="w-full bg-base-offwhite p-8">
+      <div className="space-y-6 p-8">
         <fieldset>
-          <legend className="mb-4 text-sm font-bold uppercase text-base-black">Winner</legend>
-          <div className="flex flex-wrap gap-0">
+          <legend className="mb-4 text-sm font-bold uppercase text-text-light dark:text-text-dark">
+            Winner
+          </legend>
+          <div className="flex flex-wrap gap-3">
             {(
               [
                 ["home", match.homeTeam],
@@ -92,13 +95,19 @@ export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
             ).map(([value, label]) => (
               <label
                 key={value}
-                className="flex cursor-pointer items-center gap-2 border-0 border-r-4 border-base-black bg-base-offwhite px-4 py-3 text-sm font-bold last:border-r-0"
+                className={clsx(
+                  "flex cursor-pointer items-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition-colors",
+                  winner === value
+                    ? "bg-brand-lime text-base-black"
+                    : "bg-base-offwhite text-text-light dark:bg-base-black dark:text-text-dark"
+                )}
               >
                 <input
                   type="radio"
                   name={`winner-${match.fixtureId}`}
                   checked={winner === value}
                   onChange={() => setWinner(value)}
+                  className="sr-only"
                 />
                 {label}
               </label>
@@ -106,41 +115,41 @@ export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
           </div>
         </fieldset>
 
-        <div className="mt-6 grid grid-cols-2 gap-0 border-0 border-t-4 border-base-black">
-          <label className="border-0 border-r-4 border-base-black p-4 text-sm font-bold">
-            <span className="text-base-black">Home score</span>
+        <div className="grid grid-cols-2 gap-6">
+          <label className="rounded-xl bg-base-offwhite p-4 text-sm font-bold dark:bg-base-black">
+            <span className="text-text-light dark:text-text-dark">Home score</span>
             <input
               type="number"
               min={0}
               value={homeScore}
               onChange={(e) => setHomeScore(Number(e.target.value))}
-              className="mt-2 w-full border-0 border-t-2 border-base-black bg-base-offwhite px-3 py-2 font-bold"
+              className="mt-2 w-full rounded-xl bg-base-gray px-3 py-2 font-bold text-text-light outline-none dark:bg-dark-gray dark:text-text-dark"
             />
           </label>
-          <label className="p-4 text-sm font-bold">
-            <span className="text-base-black">Away score</span>
+          <label className="rounded-xl bg-base-offwhite p-4 text-sm font-bold dark:bg-base-black">
+            <span className="text-text-light dark:text-text-dark">Away score</span>
             <input
               type="number"
               min={0}
               value={awayScore}
               onChange={(e) => setAwayScore(Number(e.target.value))}
-              className="mt-2 w-full border-0 border-t-2 border-base-black bg-base-offwhite px-3 py-2 font-bold"
+              className="mt-2 w-full rounded-xl bg-base-gray px-3 py-2 font-bold text-text-light outline-none dark:bg-dark-gray dark:text-text-dark"
             />
           </label>
         </div>
 
-        <label className="mt-0 block border-0 border-t-4 border-base-black p-4 text-sm font-bold">
-          <span className="text-base-black">First scorer</span>
+        <label className="block rounded-xl bg-base-offwhite p-4 text-sm font-bold dark:bg-base-black">
+          <span className="text-text-light dark:text-text-dark">First scorer</span>
           <input
             type="text"
             value={firstScorer}
             onChange={(e) => setFirstScorer(e.target.value)}
             placeholder="Player name"
-            className="mt-2 w-full border-0 border-t-2 border-base-black bg-base-offwhite px-3 py-2 font-bold"
+            className="mt-2 w-full rounded-xl bg-base-gray px-3 py-2 font-bold text-text-light outline-none dark:bg-dark-gray dark:text-text-dark"
           />
         </label>
 
-        <div className="mt-0 flex flex-wrap gap-0 border-0 border-t-4 border-base-black">
+        <div className="flex flex-col gap-4">
           <PulseButton
             type="button"
             onClick={submit}
@@ -155,7 +164,7 @@ export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
               type="button"
               onClick={handleClaimLive}
               variant="secondary"
-              className="w-full border-0 border-t-4 border-base-black"
+              className="w-full"
             >
               I called it
             </PulseButton>

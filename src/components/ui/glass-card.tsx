@@ -9,10 +9,10 @@ type GlassCardProps = {
 };
 
 const BG = {
-  offwhite: "bg-base-offwhite text-base-black",
+  offwhite: "bg-base-gray dark:bg-dark-gray text-text-light dark:text-text-dark",
   purple: "bg-brand-purple text-base-black",
   lime: "bg-brand-lime text-base-black",
-  black: "bg-base-black text-base-offwhite",
+  black: "bg-base-black text-text-dark dark:bg-dark-gray",
   crimson: "bg-brand-crimson text-white",
 };
 
@@ -30,7 +30,7 @@ export function GlassCard({
   return (
     <div
       className={clsx(
-        "brutal-block w-full border-0 border-l-[20px] border-brand-lime p-8",
+        "w-full rounded-xl border-0 border-l-8 border-brand-purple p-6 shadow-none",
         BG[bg],
         className
       )}
