@@ -2,26 +2,27 @@ import type { MomentumBlock } from "@/lib/types";
 
 export function MomentumTimeline({ blocks }: { blocks: MomentumBlock[] }) {
   return (
-    <div>
-      <h3 className="font-editorial mb-5 text-lg font-semibold">Momentum timeline</h3>
-      <div className="flex h-12 gap-1">
+    <div className="brutal-stack w-full">
+      <h3 className="text-2xl font-black uppercase text-base-black">Momentum timeline</h3>
+      <div className="flex h-16 w-full gap-0 border-0 border-t-4 border-base-black">
         {blocks.map((block) => (
           <div
             key={`${block.minuteStart}-${block.minuteEnd}`}
-            className="flex-1 rounded-sm"
+            className="flex-1"
             style={{
               backgroundColor:
                 block.dominant === "home"
-                  ? `rgba(124, 58, 237, ${0.2 + block.intensity * 0.5})`
+                  ? "#9B5DE5"
                   : block.dominant === "away"
-                    ? `rgba(249, 112, 102, ${0.2 + block.intensity * 0.5})`
-                    : "rgba(255,255,255,0.06)",
+                    ? "#F84E3A"
+                    : "#1A1A1A",
+              opacity: 0.35 + block.intensity * 0.65,
             }}
             title={`${block.minuteStart}'–${block.minuteEnd}'`}
           />
         ))}
       </div>
-      <div className="mt-2 flex justify-between text-[11px] text-[var(--text-muted)]">
+      <div className="flex w-full justify-between text-xs font-bold uppercase text-base-black">
         <span>Earlier</span>
         <span>Now</span>
       </div>

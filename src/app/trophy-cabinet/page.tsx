@@ -3,15 +3,13 @@ import { TrophyCabinetView } from "@/components/trophy/trophy-cabinet-view";
 
 export default function TrophyCabinetPage() {
   return (
-    <section className="pulse-page-bg pulse-page">
-      <div className="mx-auto max-w-5xl">
-        <PageHeader
-          eyebrow="Achievements"
-          title="Trophy Cabinet"
-          description="Predictions won, matches followed, and badges earned along the way."
-        />
-        <TrophyCabinetView />
-      </div>
-    </section>
+    <div className="brutal-stack w-full">
+      <PageHeader
+        eyebrow="Achievements"
+        title="Trophy Cabinet"
+        description="Predictions won, matches followed, and badges earned."
+      />
+      <TrophyCabinetView />
+    </div>
   );
 }

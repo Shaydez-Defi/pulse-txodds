@@ -1,15 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
 import type { MatchDetail } from "@/lib/types";
-import { getCountryFlag } from "@/lib/flags";
 import { useMatchDetail } from "@/hooks/use-match-detail";
 import { useMatchPlayers } from "@/hooks/use-match-players";
-import { useStadiumStore } from "@/stores/stadium-store";
 import { HotPlayerCard } from "@/components/hot-player-card";
 import { ManOfTheMatch } from "@/components/man-of-match";
-import { AnticipationBanner } from "./anticipation-banner";
-import { CircularPulseMeter } from "./circular-pulse-meter";
 import { LiveOdds } from "./live-odds";
 import { MomentumTimeline } from "./momentum-timeline";
 import { PlayerMomentumList } from "./player-momentum";
@@ -30,13 +25,12 @@ export function MatchDetailView({
     !matchProp
   );
   const match = matchProp ?? fetchedMatch;
-  const theme = useStadiumStore((s) => s.theme);
   const activeFixtureId = fixtureId ?? match?.fixtureId ?? 0;
   const { data: hotPlayers = [] } = useMatchPlayers(activeFixtureId, Boolean(match));
 
   if (!matchProp && isLoading) {
     return (
-      <div className="flex min-h-[50vh] items-center justify-center text-[var(--text-muted)]">
+      <div className="flex min-h-[50vh] w-full items-center justify-center bg-base-offwhite p-8 font-bold text-base-black">
         Loading match intelligence…
       </div>
     );
@@ -44,7 +38,7 @@ export function MatchDetailView({
 
   if (!match) {
     return (
-      <div className="flex min-h-[50vh] items-center justify-center text-[var(--text-muted)]">
+      <div className="flex min-h-[50vh] w-full items-center justify-center bg-base-offwhite p-8 font-bold text-base-black">
         Match not found.
       </div>
     );
@@ -52,79 +46,81 @@ export function MatchDetailView({
 
   const isFinished = match.status === "finished";
   const motm = hotPlayers[0];
+  const showAlert = match.anticipation || match.pulse > 75;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="space-y-8"
-    >
-      <div
-        className="glass-primary rounded-2xl px-8 py-10"
-        style={{ background: theme.gradient }}
-      >
-        <div className="flex flex-wrap items-center justify-between gap-8">
-          <div className="text-center md:text-left">
-            <p className="pulse-eyebrow">{match.competition}</p>
-            <h1 className="font-editorial mt-4 text-3xl font-semibold md:text-4xl">
-              {getCountryFlag(match.homeTeam)} {match.homeTeam}
-            </h1>
-          </div>
-          <div className="text-center">
-            <p className="pulse-score text-7xl text-white md:text-8xl">
-              {match.homeScore} – {match.awayScore}
-            </p>
-            <p className="mt-2 text-sm font-medium uppercase tracking-widest text-[var(--pulse-coral)]">
-              {match.status === "live" && <span className="pulse-live-dot mr-2" />}
-              {match.minuteLabel}
-            </p>
-          </div>
-          <div className="text-center md:text-right">
-            <h1 className="font-editorial text-3xl font-semibold md:text-4xl">
-              {match.awayTeam} {getCountryFlag(match.awayTeam)}
-            </h1>
-          </div>
+    <div className="brutal-stack w-full">
+      <section className="relative min-h-[70vh] w-full bg-brand-crimson">
+        <div className="absolute bottom-0 left-0 top-0 w-16 bg-base-black">
+          <div
+            className="absolute bottom-0 left-0 w-full bg-brand-lime"
+            style={{ height: `${match.pulse}%` }}
+          />
         </div>
-      </div>
 
-      <AnticipationBanner
-        show={match.anticipation || match.pulse > 75}
-        message={anticipationMessage}
-      />
-
-      <div className="grid gap-8 lg:grid-cols-[240px_1fr]">
-        <div className="flex justify-center lg:justify-start">
-          <CircularPulseMeter value={match.pulse} phase={match.phase} />
+        <div className="relative z-10 p-8 pt-16 md:p-12">
+          <p className="text-sm font-bold uppercase tracking-widest text-white">
+            {match.competition} · {match.minuteLabel}
+          </p>
+          <p className="mt-4 text-[25vh] font-black leading-none tracking-tighter text-white">
+            {match.homeScore} - {match.awayScore}
+          </p>
+          <p className="mt-6 text-4xl font-black uppercase text-white md:text-6xl">
+            {match.homeTeam}
+          </p>
+          <p className="text-4xl font-black uppercase text-white md:text-6xl">
+            {match.awayTeam}
+          </p>
         </div>
-        <div className="grid gap-8 md:grid-cols-2">
+      </section>
+
+      {showAlert && (
+        <section className="w-full bg-base-black p-8 md:p-12">
+          <p className="text-2xl font-bold leading-tight text-white md:text-4xl">
+            {anticipationMessage ??
+              "High pressure detected — a decisive moment is becoming increasingly likely."}
+          </p>
+        </section>
+      )}
+
+      <section className="grid w-full gap-0 md:grid-cols-2">
+        <div className="w-full bg-base-offwhite p-8">
           <LiveOdds odds={match.odds} />
+        </div>
+        <div className="w-full bg-brand-purple p-8">
           <MomentumTimeline blocks={match.momentumTimeline} />
         </div>
-      </div>
+      </section>
 
       {hotPlayers.length > 0 && (
-        <div>
-          <p className="mb-4 text-xs font-bold uppercase tracking-widest text-white/40">
-            🔥 Hot players right now
-          </p>
-          <div className="grid gap-4 md:grid-cols-3">
-            {hotPlayers.map((player) => (
-              <HotPlayerCard key={player.id} player={player} />
-            ))}
+        <section className="brutal-stack w-full">
+          <div className="w-full bg-base-black p-6">
+            <p className="text-sm font-bold uppercase tracking-widest text-brand-lime">
+              Hot players
+            </p>
           </div>
-        </div>
+          {hotPlayers.map((player) => (
+            <HotPlayerCard key={player.id} player={player} />
+          ))}
+        </section>
       )}
 
       {isFinished && motm && (
         <ManOfTheMatch player={motm} team={motm.team ?? match.homeTeam} />
       )}
 
-      <div className="grid gap-8 lg:grid-cols-2">
+      <section className="w-full bg-base-black p-8 md:p-12">
         <StoryCards stories={match.stories} />
-        <PlayerMomentumList players={match.players} />
-      </div>
+      </section>
 
-      <PressureHeatmap zones={match.pressureZones} />
-    </motion.div>
+      <section className="grid w-full gap-0 md:grid-cols-2">
+        <div className="w-full bg-base-offwhite p-8">
+          <PlayerMomentumList players={match.players} />
+        </div>
+        <div className="w-full bg-brand-lime p-8">
+          <PressureHeatmap zones={match.pressureZones} />
+        </div>
+      </section>
+    </div>
   );
 }

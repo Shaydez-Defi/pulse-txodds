@@ -2,16 +2,8 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
-import type { EnrichedMatch, MomentumDirection } from "@/lib/types";
-import { getCountryFlag } from "@/lib/flags";
-import {
-  momentumClass,
-  pulseMeterGlow,
-  pulseMeterGradient,
-  pulseValueTextColor,
-} from "@/lib/pulse-engine";
+import type { EnrichedMatch } from "@/lib/types";
 import clsx from "clsx";
 
 const TABS = ["All", "Live", "Today", "Upcoming", "Finished"] as const;
@@ -22,12 +14,6 @@ async function fetchMatches(): Promise<EnrichedMatch[]> {
   if (!res.ok) throw new Error("Failed to fetch matches");
   const data = (await res.json()) as { matches: EnrichedMatch[] };
   return data.matches;
-}
-
-function momentumArrow(dir: MomentumDirection) {
-  if (dir === "up") return "↑";
-  if (dir === "down") return "↓";
-  return "—";
 }
 
 function isToday(ts: number) {
@@ -55,121 +41,56 @@ function filterMatches(matches: EnrichedMatch[], tab: Tab) {
   }
 }
 
-function MagazineMatchCard({ match, index }: { match: EnrichedMatch; index: number }) {
+function BrutalMatchRow({ match }: { match: EnrichedMatch }) {
   const isLive = match.status === "live";
-  const pulse = match.pulse;
-  const minute = match.minuteLabel.replace("'", "");
+  const topBg = isLive ? "bg-brand-crimson" : "bg-brand-purple";
+  const scoreColor = isLive ? "text-white" : "text-base-black";
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.05 }}
-    >
-      <Link href={`/match/${match.fixtureId}`} className="block">
+    <Link href={`/match/${match.fixtureId}`} className="block w-full">
+      <article className="brutal-stack w-full">
         <div
-          className="glass-secondary relative mb-5 overflow-hidden rounded-2xl p-0 transition-all duration-300 hover:-translate-y-1"
-          style={{
-            boxShadow:
-              pulse > 75
-                ? "0 0 32px rgba(124, 58, 237, 0.15), inset 0 1px 0 rgba(255,255,255,0.1)"
-                : undefined,
-          }}
-        >
-          <div className="absolute left-5 top-5 flex items-center gap-2">
-            <span className="pulse-eyebrow">{match.competition}</span>
-            {isLive && (
-              <span className="pulse-live-badge">
-                <span className="pulse-live-dot h-1.5 w-1.5" />
-                {minute}&apos;
-              </span>
-            )}
-          </div>
-
-          {pulse > 75 && (
-            <div className="pulse-pressure-badge absolute right-5 top-5 rounded-full px-3 py-1">
-              High pressure
-            </div>
+          className={clsx(
+            "flex min-h-[40vh] w-full flex-col justify-end p-6 md:p-10",
+            topBg
           )}
-
-          <div className="px-6 pb-6 pt-14">
-            <div className="mb-6 flex items-center justify-between">
-              <div className="flex-1">
-                <div className="mb-1 flex items-center gap-2">
-                  <span className="text-2xl">{getCountryFlag(match.homeTeam)}</span>
-                  <span
-                    className={clsx(
-                      "font-editorial text-xs font-bold uppercase tracking-wider",
-                      momentumClass(match.momentumHome)
-                    )}
-                  >
-                    {momentumArrow(match.momentumHome)} {match.homeCode}
-                  </span>
-                </div>
-                <p className="font-editorial text-lg font-semibold text-white">
-                  {match.homeTeam}
-                </p>
-              </div>
-
-              <div className="px-4 text-center">
-                <p className="pulse-score text-5xl text-white sm:text-6xl">
-                  {match.homeScore}
-                  <span className="mx-1 text-white/20">–</span>
-                  {match.awayScore}
-                </p>
-              </div>
-
-              <div className="flex-1 text-right">
-                <div className="mb-1 flex items-center justify-end gap-2">
-                  <span
-                    className={clsx(
-                      "font-editorial text-xs font-bold uppercase tracking-wider",
-                      momentumClass(match.momentumAway)
-                    )}
-                  >
-                    {match.awayCode} {momentumArrow(match.momentumAway)}
-                  </span>
-                  <span className="text-2xl">{getCountryFlag(match.awayTeam)}</span>
-                </div>
-                <p className="font-editorial text-lg font-semibold text-white">
-                  {match.awayTeam}
-                </p>
-              </div>
-            </div>
-
-            <div className="mb-3">
-              <div className="mb-1.5 flex items-center justify-between">
-                <span className="pulse-eyebrow">Pulse</span>
-                <span
-                  className="font-headline text-sm"
-                  style={{ color: pulseValueTextColor(pulse) }}
-                >
-                  {pulse}
-                </span>
-              </div>
-              <div className="h-1 overflow-hidden rounded-full bg-white/5">
-                <div
-                  className="h-full rounded-full transition-all duration-1000"
-                  style={{
-                    width: `${pulse}%`,
-                    background: pulseMeterGradient(pulse),
-                    boxShadow: pulseMeterGlow(pulse),
-                  }}
-                />
-              </div>
-            </div>
-
-            {pulse > 75 && (
-              <div className="glass-alert mt-3 rounded-xl px-4 py-3">
-                <p className="font-editorial text-xs font-medium text-[#fecaca]">
-                  High pressure — something is coming
-                </p>
-              </div>
+          style={{ flex: "0 0 60%" }}
+        >
+          <p className="text-xs font-bold uppercase tracking-widest text-white/80">
+            {match.competition}
+            {isLive && ` · ${match.minuteLabel}`}
+          </p>
+          <p
+            className={clsx(
+              "font-black leading-none tracking-tighter",
+              scoreColor,
+              "text-[20vh]"
             )}
+          >
+            {match.homeScore} - {match.awayScore}
+          </p>
+        </div>
+
+        <div className="relative w-full bg-base-offwhite p-6 md:p-10" style={{ flex: "0 0 40%" }}>
+          <p className="text-4xl font-black uppercase leading-none tracking-tighter text-base-black md:text-6xl">
+            {match.homeTeam}
+          </p>
+          <p className="mt-2 text-4xl font-black uppercase leading-none tracking-tighter text-base-black md:text-6xl">
+            {match.awayTeam}
+          </p>
+
+          <div className="relative mt-6 h-24 w-full bg-base-black">
+            <div
+              className="absolute left-0 top-0 h-full bg-brand-lime"
+              style={{ width: `${match.pulse}%` }}
+            />
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-2xl font-black text-base-black mix-blend-difference">
+              {match.pulse}
+            </span>
           </div>
         </div>
-      </Link>
-    </motion.div>
+      </article>
+    </Link>
   );
 }
 
@@ -189,31 +110,28 @@ export default function MatchesPage() {
   );
 
   return (
-    <div className="pulse-page-bg min-h-screen pb-8">
-      <div className="pulse-page">
-        <p className="pulse-eyebrow mb-3">World Cup 2026</p>
-        <h1 className="font-headline text-6xl leading-none tracking-wide text-white md:text-7xl">
-          LIVE
-          <br />
-          MATCHES
+    <div className="brutal-stack w-full">
+      <header className="w-full bg-base-black p-8 text-base-offwhite md:p-12">
+        <p className="text-sm font-bold uppercase tracking-widest">World Cup 2026</p>
+        <h1 className="mt-2 text-6xl font-black uppercase leading-none tracking-tighter md:text-8xl">
+          All Matches
         </h1>
-        <div className="mt-4 flex items-center gap-2">
-          <span className="pulse-live-dot" />
-          <span className="font-editorial text-sm font-medium text-[var(--pulse-coral)]">
-            {isLoading ? "Syncing…" : `${liveCount} matches live now`}
-          </span>
-        </div>
-      </div>
+        <p className="mt-4 text-lg font-bold text-brand-lime">
+          {isLoading ? "Syncing…" : `${liveCount} live now`}
+        </p>
+      </header>
 
-      <div className="mb-8 flex gap-2 overflow-x-auto px-6">
+      <div className="flex w-full flex-wrap gap-0 border-0 border-b-4 border-base-black">
         {TABS.map((tab) => (
           <button
             key={tab}
             type="button"
             onClick={() => setActiveTab(tab)}
             className={clsx(
-              "pulse-tab",
-              activeTab === tab ? "pulse-tab-active" : "pulse-tab-inactive"
+              "flex-1 px-4 py-4 text-sm font-bold uppercase tracking-tight",
+              activeTab === tab
+                ? "bg-brand-lime text-base-black"
+                : "bg-base-offwhite text-base-black hover:bg-brand-purple"
             )}
           >
             {tab}
@@ -221,15 +139,17 @@ export default function MatchesPage() {
         ))}
       </div>
 
-      <div className="px-4 md:mx-auto md:max-w-2xl md:px-6">
+      <div className="brutal-stack w-full">
         {isLoading ? (
-          <p className="px-2 text-[var(--text-muted)]">Loading fixtures…</p>
+          <p className="w-full bg-base-offwhite p-8 font-bold text-base-black">
+            Loading fixtures…
+          </p>
         ) : filtered.length === 0 ? (
-          <p className="px-2 text-[var(--text-muted)]">No matches in this filter.</p>
+          <p className="w-full bg-base-offwhite p-8 font-bold text-base-black">
+            No matches in this filter.
+          </p>
         ) : (
-          filtered.map((match, i) => (
-            <MagazineMatchCard key={match.fixtureId} match={match} index={i} />
-          ))
+          filtered.map((match) => <BrutalMatchRow key={match.fixtureId} match={match} />)
         )}
       </div>
     </div>

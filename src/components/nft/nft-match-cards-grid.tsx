@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { GlassCard } from "@/components/ui/glass-card";
 
 type NFTCard = {
   id: string;
@@ -12,7 +10,6 @@ type NFTCard = {
   pulseScore: number;
   tier: "Legendary" | "Epic" | "Rare";
   match: string;
-  imageGlow: string;
   minted: boolean;
 };
 
@@ -26,7 +23,6 @@ export function NftMatchCardsGrid() {
       pulseScore: 94,
       tier: "Legendary",
       match: "Argentina vs England",
-      imageGlow: "from-[var(--pulse-coral)]/25 to-[var(--pulse-purple)]/15",
       minted: false,
     },
     {
@@ -36,7 +32,6 @@ export function NftMatchCardsGrid() {
       pulseScore: 88,
       tier: "Epic",
       match: "Argentina vs England",
-      imageGlow: "from-purple-500/30 to-indigo-500/20",
       minted: false,
     },
     {
@@ -46,7 +41,6 @@ export function NftMatchCardsGrid() {
       pulseScore: 78,
       tier: "Rare",
       match: "France vs Spain",
-      imageGlow: "from-[var(--pulse-violet)]/25 to-[var(--pulse-purple)]/15",
       minted: false,
     },
   ]);
@@ -58,101 +52,48 @@ export function NftMatchCardsGrid() {
     );
   }
 
+  const tierBg = {
+    Legendary: "bg-brand-crimson text-white",
+    Epic: "bg-brand-purple text-base-black",
+    Rare: "bg-base-offwhite text-base-black",
+  };
+
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="brutal-stack w-full">
       {cards.map((card) => (
-        <motion.div
-          key={card.id}
-          whileHover={{ y: -8, scale: 1.01 }}
-          transition={{ type: "spring", stiffness: 300 }}
-        >
-          <GlassCard className="relative flex h-full flex-col overflow-hidden border-white/10 p-0">
-            <div
-              className={`relative flex aspect-[4/5] w-full flex-col items-center justify-center border-b border-white/5 bg-gradient-to-br p-6 ${card.imageGlow}`}
-            >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] bg-[size:16px_16px] opacity-10" />
-
-              <svg
-                className="absolute inset-0 h-full w-full opacity-20"
-                viewBox="0 0 200 200"
-                preserveAspectRatio="none"
+        <article key={card.id} className="brutal-stack w-full border-0 border-t-4 border-base-black">
+          <div className={`w-full p-8 ${tierBg[card.tier]}`}>
+            <p className="text-xs font-bold uppercase tracking-widest">{card.tier}</p>
+            <p className="mt-4 text-[15vw] font-black leading-none tracking-tighter md:text-8xl">
+              {card.pulseScore}
+            </p>
+            <h4 className="mt-6 text-3xl font-black uppercase">{card.title}</h4>
+            <p className="mt-2 text-lg font-bold">{card.player}</p>
+          </div>
+          <div className="w-full bg-base-offwhite p-8">
+            <p className="font-bold text-base-black">Fixture: {card.match}</p>
+            <p className="font-bold text-base-black">Trigger: Pulse Peak &gt; 80%</p>
+            {!publicKey ? (
+              <button
+                disabled
+                className="mt-6 w-full border-0 border-t-4 border-base-black bg-base-black py-4 text-xs font-bold uppercase text-base-offwhite"
               >
-                <path
-                  d="M0,100 L40,100 L50,60 L60,140 L70,90 L80,110 L90,100 L200,100"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2"
-                />
-              </svg>
-
-              <div className="relative z-10 flex flex-col items-center text-center">
-                <span
-                  className={`rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-wider ${
-                    card.tier === "Legendary"
-                      ? "border border-[var(--pulse-coral)]/30 bg-[var(--pulse-coral)]/15 text-[var(--pulse-coral)]"
-                      : card.tier === "Epic"
-                        ? "border border-[var(--pulse-purple)]/30 bg-[var(--pulse-purple)]/15 text-[var(--pulse-violet-soft)]"
-                        : "border border-white/15 bg-white/5 text-[var(--text-secondary)]"
-                  }`}
-                >
-                  {card.tier}
-                </span>
-
-                <div className="mt-6 flex h-20 w-20 items-center justify-center rounded-full border border-white/10 bg-black/40 backdrop-blur-md">
-                  <span className="pulse-score text-4xl text-white">
-                    {card.pulseScore}
-                  </span>
-                </div>
-
-                <h4 className="font-display mt-6 px-2 text-xl font-bold tracking-tight text-white">
-                  {card.title}
-                </h4>
-                <p className="mt-1 text-sm text-[var(--text-secondary)]">
-                  {card.player}
-                </p>
+                Connect Wallet to Mint
+              </button>
+            ) : card.minted ? (
+              <div className="mt-6 w-full border-0 border-t-4 border-base-black bg-brand-lime py-4 text-center text-xs font-bold uppercase text-base-black">
+                Minted
               </div>
-            </div>
-
-            <div className="flex flex-grow flex-col justify-between p-5">
-              <div className="space-y-1 text-xs text-[var(--text-muted)]">
-                <p className="flex justify-between">
-                  <span>Fixture:</span>
-                  <span className="font-medium text-[var(--text-secondary)]">
-                    {card.match}
-                  </span>
-                </p>
-                <p className="flex justify-between">
-                  <span>Dynamic Trigger:</span>
-                  <span className="text-[var(--text-secondary)]">
-                    Pulse Peak &gt; 80%
-                  </span>
-                </p>
-              </div>
-
-              <div className="mt-6">
-                {!publicKey ? (
-                  <button
-                    disabled
-                    className="w-full rounded-full border border-white/10 bg-white/5 py-2.5 text-center text-xs font-semibold text-[var(--text-muted)]"
-                  >
-                    Connect Wallet to Mint
-                  </button>
-                ) : card.minted ? (
-                  <div className="w-full rounded-full border border-[var(--pulse-purple)]/25 bg-[var(--pulse-purple)]/10 py-2.5 text-center text-xs font-semibold text-[var(--pulse-violet-soft)]">
-                    ✓ Minted Successfully
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => mint(card.id)}
-                    className="pulse-btn-primary w-full py-2.5 text-xs"
-                  >
-                    Mint NFT Card
-                  </button>
-                )}
-              </div>
-            </div>
-          </GlassCard>
-        </motion.div>
+            ) : (
+              <button
+                onClick={() => mint(card.id)}
+                className="mt-6 w-full border-0 border-t-4 border-base-black bg-brand-lime py-4 text-sm font-bold uppercase text-base-black"
+              >
+                Mint NFT Card
+              </button>
+            )}
+          </div>
+        </article>
       ))}
     </div>
   );

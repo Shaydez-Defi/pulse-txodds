@@ -4,9 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import type { EnrichedMatch } from "@/lib/types";
-import { pulseColor } from "@/lib/pulse-engine";
 import { MatchCard } from "@/components/match/match-card";
-import { PulseButton } from "@/components/ui/pulse-button";
 
 const FEATURED = {
   homeTeam: "England",
@@ -142,25 +140,21 @@ const FEATURES = [
     title: "Feel the Match",
     description:
       "Our Pulse Meter measures match intensity in real time. Not just possession — pressure, momentum, danger.",
-    icon: "pulse" as const,
   },
   {
     title: "See It Before It Happens",
     description:
       "Anticipation Alerts fire before goals, red cards, and momentum shifts. Not after. Before.",
-    icon: "lightning" as const,
   },
   {
-    title: "Read the Pitch",
+    title: "Stories, Not Stats",
     description:
-      "AI narratives explain why the match is changing. No stats to decode. Just the story of the game.",
-    icon: "story" as const,
+      "AI narrative reads the match like a broadcast analyst — turning data into editorial tension.",
   },
 ];
 
-export default function HomePage() {
+export default function HomeDashboardPage() {
   const [narrative, setNarrative] = useState(FALLBACK_NARRATIVES[0]);
-  const [fallbackIndex, setFallbackIndex] = useState(0);
 
   const fetchNarrative = useCallback(async () => {
     try {
@@ -174,270 +168,146 @@ export default function HomePage() {
           awayScore: FEATURED.awayScore,
           minute: FEATURED.minute,
           pulse: FEATURED.pulse,
-          momentumTeam: FEATURED.homeTeam,
         }),
       });
-
-      if (res.ok) {
-        const data = (await res.json()) as { narrative?: string };
-        if (data.narrative) {
-          setNarrative(data.narrative);
-          return;
-        }
-      }
+      if (!res.ok) return;
+      const data = (await res.json()) as { narrative?: string };
+      if (data.narrative) setNarrative(data.narrative);
     } catch {
-      /* fall through to mock rotation */
+      setNarrative(
+        FALLBACK_NARRATIVES[Math.floor(Math.random() * FALLBACK_NARRATIVES.length)]
+      );
     }
-
-    setFallbackIndex((i) => {
-      const next = (i + 1) % FALLBACK_NARRATIVES.length;
-      setNarrative(FALLBACK_NARRATIVES[next]);
-      return next;
-    });
   }, []);
 
   useEffect(() => {
+    void fetchNarrative();
     const timer = setInterval(fetchNarrative, 30_000);
     return () => clearInterval(timer);
   }, [fetchNarrative]);
 
-  const pulseBarColor = pulseColor(FEATURED.pulse);
-
   return (
-    <div className="pulse-page-bg px-4 py-8 sm:px-6 sm:py-12">
-      <div className="mx-auto max-w-6xl space-y-16">
-
-        {/* Section 1 — Featured Match */}
-        <section>
-          <div className="glass-primary rounded-2xl p-6 sm:p-10">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <p className="pulse-eyebrow">Featured · Live</p>
-                <h1 className="font-editorial mt-3 text-2xl font-semibold sm:text-3xl">
-                  {FEATURED.homeTeam}{" "}
-                  <span className="text-[var(--text-muted)]">vs</span>{" "}
-                  {FEATURED.awayTeam}
-                </h1>
-              </div>
-              <div className="text-right">
-                <p className="pulse-score text-5xl text-white sm:text-6xl">
-                  {FEATURED.homeScore} – {FEATURED.awayScore}
-                </p>
-                <p className="mt-1 flex items-center justify-end gap-2 text-sm font-medium text-[var(--pulse-coral)]">
-                  <span className="pulse-live-dot" />
-                  {FEATURED.minute}
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-8">
-              <div className="mb-2 flex items-center justify-between text-xs uppercase tracking-wider text-white/50">
-                <span>Pulse</span>
-                <span style={{ color: pulseBarColor }}>{FEATURED.pulse}</span>
-              </div>
-              <div className="h-3 overflow-hidden rounded-full bg-white/5">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: `${FEATURED.pulse}%` }}
-                  transition={{ duration: 1.2, ease: "easeOut" }}
-                  className="h-full rounded-full animate-pulse-breathe"
-                  style={{ backgroundColor: pulseBarColor }}
-                />
-              </div>
-            </div>
-
-            {FEATURED.pulse > 75 && (
-              <motion.div
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="glass-alert mt-6 rounded-xl px-4 py-3"
-              >
-                <p className="font-editorial text-sm font-medium text-[#fecaca]">
-                  High pressure — something is coming
-                </p>
-              </motion.div>
-            )}
-
-            <div className="mt-8 rounded-xl border border-white/8 bg-black/20 px-5 py-6 sm:px-8 sm:py-8">
-              <p className="pulse-eyebrow text-[var(--pulse-violet-soft)]">
-                Pulse reads the match
-              </p>
-              <div className="mt-4 min-h-[4.5rem]">
-                <AnimatePresence mode="wait">
-                  <motion.p
-                    key={narrative}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.8 }}
-                    className="text-lg font-medium leading-relaxed text-white/90 sm:text-xl"
-                  >
-                    {narrative}
-                  </motion.p>
-                </AnimatePresence>
-              </div>
-            </div>
-
-            <div className="mt-6 grid grid-cols-3 gap-4 border-t border-white/8 pt-6">
-              <Stat label="Possession" value={`${FEATURED.possessionHome}% – ${FEATURED.possessionAway}%`} />
-              <Stat label="Dangerous Attacks" value={`${FEATURED.dangerousAttacks}`} sub="last 10 mins" />
-              <Stat label="Corners" value={`${FEATURED.corners}`} sub="last 10 mins" />
-            </div>
-
-            <div className="mt-8 flex justify-center sm:justify-start">
-              <PulseButton href="/match/demo" variant="primary">
-                Watch Match
-              </PulseButton>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 2 — Live Intelligence Feed */}
-        <section>
-          <h2 className="font-headline text-3xl tracking-wide text-white">
-            Live across all matches
-          </h2>
-          <p className="mt-1 text-sm text-[var(--text-secondary)]">
-            Anticipation alerts firing right now
+    <div className="brutal-stack w-full">
+      <section className="relative w-full bg-brand-crimson">
+        <div className="absolute bottom-0 left-0 top-0 w-16 bg-base-black">
+          <div
+            className="absolute bottom-0 left-0 w-full bg-brand-lime"
+            style={{ height: `${FEATURED.pulse}%` }}
+          />
+        </div>
+        <div className="relative p-8 md:p-12">
+          <p className="text-sm font-bold uppercase tracking-widest text-white">
+            Featured · Live · {FEATURED.minute}
           </p>
-          <div className="mt-6 flex gap-4 overflow-x-auto pb-2 md:grid md:grid-cols-2 md:overflow-visible lg:grid-cols-4">
-            {LIVE_ALERTS.map((alert) => (
-              <div
-                key={alert.match}
-                className="glass-secondary min-w-64 shrink-0 p-5 md:min-w-0"
-              >
-                <p className="text-sm font-medium text-white">
-                  <span className="mr-1 inline-block animate-pulse">⚠️</span>
-                  {alert.match} · {alert.minute}
-                </p>
-                <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
-                  {alert.text}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
+          <p className="mt-4 text-[18vh] font-black leading-none tracking-tighter text-white">
+            {FEATURED.homeScore} - {FEATURED.awayScore}
+          </p>
+          <p className="mt-4 text-4xl font-black uppercase text-white md:text-6xl">
+            {FEATURED.homeTeam} vs {FEATURED.awayTeam}
+          </p>
 
-        {/* Section 3 — What Makes Pulse Different */}
-        <section>
-          <h2 className="font-headline mb-8 text-3xl tracking-wide text-white">
+          <div className="mt-8 w-full bg-base-black p-8">
+            <p className="text-xs font-bold uppercase tracking-widest text-brand-lime">
+              Pulse reads the match
+            </p>
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={narrative}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="mt-4 text-2xl font-bold leading-tight text-white md:text-3xl"
+              >
+                {narrative}
+              </motion.p>
+            </AnimatePresence>
+          </div>
+
+          <div className="mt-0 grid w-full grid-cols-3 gap-0 border-0 border-t-4 border-base-black">
+            <Stat label="Possession" value={`${FEATURED.possessionHome}% / ${FEATURED.possessionAway}%`} />
+            <Stat label="Danger" value={`${FEATURED.dangerousAttacks}`} />
+            <Stat label="Corners" value={`${FEATURED.corners}`} />
+          </div>
+
+          <Link
+            href="/match/demo"
+            className="mt-0 inline-block w-full bg-brand-lime py-6 text-center text-2xl font-bold text-base-black"
+          >
+            Watch Match
+          </Link>
+        </div>
+      </section>
+
+      <section className="w-full bg-base-black p-8 md:p-12">
+        <h2 className="text-sm font-bold uppercase tracking-widest text-brand-lime">
+          Live across all matches
+        </h2>
+        <div className="brutal-stack mt-0 w-full">
+          {LIVE_ALERTS.map((alert) => (
+            <div key={alert.match} className="w-full border-0 border-t-4 border-brand-purple p-8">
+              <p className="text-4xl font-bold leading-none tracking-tighter text-white">
+                {alert.match} · {alert.minute}
+              </p>
+              <p className="mt-4 text-2xl font-bold text-base-offwhite">{alert.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="brutal-stack w-full">
+        <div className="w-full bg-base-offwhite p-8">
+          <h2 className="text-4xl font-black uppercase tracking-tighter text-base-black">
             What makes Pulse different
           </h2>
-          <div className="grid gap-6 md:grid-cols-3">
-            {FEATURES.map((feature, i) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="glass-secondary p-7"
-              >
-                <FeatureIcon type={feature.icon} />
-                <h3 className="font-editorial mt-5 text-lg font-semibold text-white">
-                  {feature.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
-                  {feature.description}
-                </p>
-              </motion.div>
-            ))}
+        </div>
+        {FEATURES.map((feature) => (
+          <div key={feature.title} className="w-full border-0 border-t-4 border-base-black bg-brand-purple p-8">
+            <h3 className="text-3xl font-black uppercase text-base-black">{feature.title}</h3>
+            <p className="mt-4 text-lg font-bold text-base-black">{feature.description}</p>
           </div>
-        </section>
+        ))}
+      </section>
 
-        {/* Section 4 — Other Live Matches */}
-        <section>
-          <h2 className="font-headline text-3xl tracking-wide text-white">
-            Live now
-          </h2>
-          <div className="mt-6 grid gap-6 md:grid-cols-2">
-            {LIVE_MATCHES.map((match) => (
-              <MatchCard key={match.fixtureId} match={match} />
-            ))}
-          </div>
-          <div className="mt-8 flex justify-center">
-            <PulseButton href="/matches" variant="secondary">
-              View All Matches
-            </PulseButton>
-          </div>
-        </section>
+      <section className="brutal-stack w-full">
+        <div className="w-full bg-base-black p-8">
+          <h2 className="text-4xl font-black uppercase text-brand-lime">Live now</h2>
+        </div>
+        {LIVE_MATCHES.map((match) => (
+          <MatchCard key={match.fixtureId} match={match} />
+        ))}
+        <Link
+          href="/matches"
+          className="block w-full bg-brand-lime py-8 text-center text-xl font-bold text-base-black"
+        >
+          View All Matches
+        </Link>
+      </section>
 
-        {/* Section 5 — Upcoming Matches */}
-        <section>
-          <h2 className="font-headline text-3xl tracking-wide text-white">
-            Coming up
-          </h2>
-          <div className="mt-6 space-y-3">
-            {UPCOMING.map((fixture) => (
-              <div
-                key={`${fixture.home}-${fixture.away}`}
-                className="glass-secondary flex items-center justify-between px-6 py-5"
-              >
-                <p className="font-medium text-white">
-                  {fixture.home}{" "}
-                  <span className="text-[var(--text-muted)]">vs</span>{" "}
-                  {fixture.away}
-                </p>
-                <p className="text-sm text-[var(--text-secondary)]">
-                  {fixture.kickoff}
-                </p>
-              </div>
-            ))}
+      <section className="brutal-stack w-full">
+        <div className="w-full bg-base-offwhite p-8">
+          <h2 className="text-4xl font-black uppercase text-base-black">Coming up</h2>
+        </div>
+        {UPCOMING.map((fixture) => (
+          <div
+            key={`${fixture.home}-${fixture.away}`}
+            className="flex w-full items-center justify-between border-0 border-t-4 border-base-black bg-base-offwhite p-8"
+          >
+            <p className="text-2xl font-black uppercase text-base-black md:text-4xl">
+              {fixture.home} vs {fixture.away}
+            </p>
+            <p className="text-lg font-bold text-base-black">{fixture.kickoff}</p>
           </div>
-        </section>
-      </div>
+        ))}
+      </section>
     </div>
   );
 }
 
-function Stat({
-  label,
-  value,
-  sub,
-}: {
-  label: string;
-  value: string;
-  sub?: string;
-}) {
+function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="text-center sm:text-left">
-      <p className="text-xs uppercase tracking-wider text-white/50">{label}</p>
-      <p className="mt-1 font-display text-lg font-semibold text-white">{value}</p>
-      {sub && <p className="text-[10px] text-[var(--text-muted)]">{sub}</p>}
+    <div className="border-0 border-r-4 border-base-black bg-base-offwhite p-6 last:border-r-0">
+      <p className="text-xs font-bold uppercase tracking-widest text-base-black">{label}</p>
+      <p className="mt-2 text-2xl font-black text-base-black">{value}</p>
     </div>
-  );
-}
-
-function FeatureIcon({ type }: { type: "pulse" | "lightning" | "story" }) {
-  if (type === "lightning") {
-    return <span className="text-3xl">⚡</span>;
-  }
-
-  if (type === "story") {
-    return (
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" className="text-[var(--pulse-violet-soft)]">
-        <path
-          d="M12 3l1.5 4.5H18l-3.5 2.5L16 14.5 12 12l-4 2.5 1.5-4.5L6 7.5h4.5L12 3z"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinejoin="round"
-        />
-        <path d="M5 19h14M8 16h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" className="text-[var(--pulse-coral)]">
-      <motion.path
-        d="M4 12h3l2-5 3 10 2-6 2 4h4"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        animate={{ opacity: [0.6, 1, 0.6] }}
-        transition={{ duration: 1.5, repeat: Infinity }}
-      />
-    </svg>
   );
 }

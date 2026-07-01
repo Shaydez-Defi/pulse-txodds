@@ -4,9 +4,9 @@ import { HeroSection } from "@/components/home/hero-section";
 
 export function HomeContent() {
   return (
-    <div className="relative">
+    <div className="brutal-stack w-full">
       <HeroSection />
-      <footer className="absolute bottom-4 left-0 right-0 text-center text-xs text-white/30">
+      <footer className="w-full bg-base-black p-4 text-center text-xs font-bold uppercase text-base-offwhite">
         © 2026 Pulse · Built on Solana · Powered by TxLINE
       </footer>
     </div>

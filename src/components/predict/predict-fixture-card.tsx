@@ -6,7 +6,6 @@ import type { EnrichedMatch } from "@/lib/types";
 import { usePredictionsStore } from "@/stores/predictions-store";
 import { useAuthModalStore } from "@/stores/auth-modal-store";
 import { useIsAuthenticated } from "@/hooks/use-is-authenticated";
-import { GlassCard } from "@/components/ui/glass-card";
 import { PulseButton } from "@/components/ui/pulse-button";
 
 export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
@@ -69,28 +68,21 @@ export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
   }
 
   return (
-    <GlassCard variant="primary">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <p className="pulse-eyebrow">{match.competition}</p>
-          <h3 className="font-editorial mt-3 text-xl font-semibold">
-            {match.homeTeam} vs {match.awayTeam}
-          </h3>
-          <p className="mt-1 text-sm text-[var(--text-secondary)]">{kickoff}</p>
-        </div>
-        {match.odds && (
-          <div className="text-right text-xs text-[var(--text-muted)]">
-            <p>H {match.odds.home.toFixed(1)}%</p>
-            <p>D {match.odds.draw.toFixed(1)}%</p>
-            <p>A {match.odds.away.toFixed(1)}%</p>
-          </div>
-        )}
+    <article className="brutal-stack w-full border-0 border-t-4 border-base-black">
+      <div className="w-full bg-brand-purple p-8">
+        <p className="text-xs font-bold uppercase tracking-widest text-base-black">
+          {match.competition}
+        </p>
+        <h3 className="mt-2 text-4xl font-black uppercase text-base-black">
+          {match.homeTeam} vs {match.awayTeam}
+        </h3>
+        <p className="mt-2 font-bold text-base-black">{kickoff}</p>
       </div>
 
-      <div className="mt-8 grid gap-6 md:grid-cols-2">
+      <div className="w-full bg-base-offwhite p-8">
         <fieldset>
-          <legend className="mb-3 text-sm text-[var(--text-secondary)]">Winner</legend>
-          <div className="flex flex-wrap gap-3">
+          <legend className="mb-4 text-sm font-bold uppercase text-base-black">Winner</legend>
+          <div className="flex flex-wrap gap-0">
             {(
               [
                 ["home", match.homeTeam],
@@ -100,7 +92,7 @@ export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
             ).map(([value, label]) => (
               <label
                 key={value}
-                className="flex cursor-pointer items-center gap-2 rounded-lg border border-white/8 px-4 py-2 text-sm"
+                className="flex cursor-pointer items-center gap-2 border-0 border-r-4 border-base-black bg-base-offwhite px-4 py-3 text-sm font-bold last:border-r-0"
               >
                 <input
                   type="radio"
@@ -114,56 +106,62 @@ export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
           </div>
         </fieldset>
 
-        <div className="grid grid-cols-2 gap-4">
-          <label className="text-sm">
-            <span className="text-[var(--text-secondary)]">Home score</span>
+        <div className="mt-6 grid grid-cols-2 gap-0 border-0 border-t-4 border-base-black">
+          <label className="border-0 border-r-4 border-base-black p-4 text-sm font-bold">
+            <span className="text-base-black">Home score</span>
             <input
               type="number"
               min={0}
               value={homeScore}
               onChange={(e) => setHomeScore(Number(e.target.value))}
-              className="mt-2 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2"
+              className="mt-2 w-full border-0 border-t-2 border-base-black bg-base-offwhite px-3 py-2 font-bold"
             />
           </label>
-          <label className="text-sm">
-            <span className="text-[var(--text-secondary)]">Away score</span>
+          <label className="p-4 text-sm font-bold">
+            <span className="text-base-black">Away score</span>
             <input
               type="number"
               min={0}
               value={awayScore}
               onChange={(e) => setAwayScore(Number(e.target.value))}
-              className="mt-2 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2"
+              className="mt-2 w-full border-0 border-t-2 border-base-black bg-base-offwhite px-3 py-2 font-bold"
             />
           </label>
         </div>
-      </div>
 
-      <label className="mt-4 block text-sm">
-        <span className="text-[var(--text-secondary)]">First scorer</span>
-        <input
-          type="text"
-          value={firstScorer}
-          onChange={(e) => setFirstScorer(e.target.value)}
-          placeholder="Player name"
-          className="mt-2 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2"
-        />
-      </label>
+        <label className="mt-0 block border-0 border-t-4 border-base-black p-4 text-sm font-bold">
+          <span className="text-base-black">First scorer</span>
+          <input
+            type="text"
+            value={firstScorer}
+            onChange={(e) => setFirstScorer(e.target.value)}
+            placeholder="Player name"
+            className="mt-2 w-full border-0 border-t-2 border-base-black bg-base-offwhite px-3 py-2 font-bold"
+          />
+        </label>
 
-      <div className="mt-8 flex flex-wrap gap-3">
-        <PulseButton
-          type="button"
-          onClick={submit}
-          disabled={submitted}
-          variant="primary"
-        >
-          {submitted ? "Prediction saved" : "Submit prediction"}
-        </PulseButton>
-        {match.status === "live" && submitted && predictionId && (
-          <PulseButton type="button" onClick={handleClaimLive} variant="secondary">
-            I called it
+        <div className="mt-0 flex flex-wrap gap-0 border-0 border-t-4 border-base-black">
+          <PulseButton
+            type="button"
+            onClick={submit}
+            disabled={submitted}
+            variant="primary"
+            className="w-full"
+          >
+            {submitted ? "Prediction saved" : "Submit prediction"}
           </PulseButton>
-        )}
+          {match.status === "live" && submitted && predictionId && (
+            <PulseButton
+              type="button"
+              onClick={handleClaimLive}
+              variant="secondary"
+              className="w-full border-0 border-t-4 border-base-black"
+            >
+              I called it
+            </PulseButton>
+          )}
+        </div>
       </div>
-    </GlassCard>
+    </article>
   );
 }

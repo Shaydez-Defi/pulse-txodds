@@ -6,7 +6,6 @@ import { useAuthModalStore } from "@/stores/auth-modal-store";
 import { useIsAuthenticated } from "@/hooks/use-is-authenticated";
 import { PageHeader } from "@/components/layout/page-header";
 import { PulseButton } from "@/components/ui/pulse-button";
-import { GlassCard } from "@/components/ui/glass-card";
 import { TrophyCabinetView } from "@/components/trophy/trophy-cabinet-view";
 import { NftMatchCardsGrid } from "@/components/nft/nft-match-cards-grid";
 
@@ -14,69 +13,64 @@ function SignInPrompt() {
   const openAuthModal = useAuthModalStore((s) => s.open);
 
   return (
-    <GlassCard variant="primary" className="text-center">
-      <p className="text-xs uppercase tracking-[0.24em] text-[var(--text-muted)]">
-        Personal data
-      </p>
-      <h3 className="font-display mt-3 text-xl font-semibold text-white">
+    <div className="w-full border-0 border-l-[20px] border-brand-lime bg-base-offwhite p-8 text-center">
+      <h3 className="text-3xl font-black uppercase text-base-black">
         Sign in to view your Pulse profile
       </h3>
-      <p className="mt-2 text-sm text-[var(--text-secondary)]">
+      <p className="mt-4 font-bold text-base-black">
         Connect with Google or Phantom to sync predictions, trophies, and settings.
       </p>
-      <div className="mt-6 flex justify-center">
+      <div className="mt-8 flex justify-center">
         <PulseButton type="button" onClick={() => openAuthModal()} variant="primary">
           Sign in to continue
         </PulseButton>
       </div>
-    </GlassCard>
+    </div>
   );
 }
 
 function NotificationsSection() {
   return (
-    <GlassCard variant="primary">
-      <p className="text-xs uppercase tracking-[0.24em] text-[var(--text-muted)]">
-        Notifications
-      </p>
-      <div className="mt-4 space-y-3">
-        {[
-          "England vs Brazil — Pulse hit 91. High pressure alert.",
-          "Your prediction on Argentina vs France is live.",
-          "New badge unlocked: Momentum Reader.",
-        ].map((item) => (
-          <p key={item} className="rounded-lg border border-white/8 bg-white/[0.03] px-4 py-3 text-sm text-[var(--text-secondary)]">
-            {item}
-          </p>
-        ))}
+    <div className="brutal-stack w-full">
+      <div className="w-full bg-base-black p-6">
+        <p className="text-sm font-bold uppercase text-brand-lime">Notifications</p>
       </div>
-      <p className="mt-4 text-xs text-[var(--text-muted)]">Placeholder — push notifications coming soon.</p>
-    </GlassCard>
+      {[
+        "England vs Brazil — Pulse hit 91. High pressure alert.",
+        "Your prediction on Argentina vs France is live.",
+        "New badge unlocked: Momentum Reader.",
+      ].map((item) => (
+        <p
+          key={item}
+          className="w-full border-0 border-t-4 border-base-black bg-base-offwhite p-6 font-bold text-base-black"
+        >
+          {item}
+        </p>
+      ))}
+    </div>
   );
 }
 
 function SettingsSection() {
   return (
-    <GlassCard variant="primary">
-      <p className="text-xs uppercase tracking-[0.24em] text-[var(--text-muted)]">
-        Settings
-      </p>
-      <div className="mt-4 space-y-2 text-sm text-[var(--text-secondary)]">
-        <p className="flex justify-between border-b border-white/8 py-3">
-          <span>Match alerts</span>
-          <span className="text-[var(--pulse-violet-soft)]">On</span>
-        </p>
-        <p className="flex justify-between border-b border-white/8 py-3">
-          <span>Pulse threshold</span>
-          <span>75+</span>
-        </p>
-        <p className="flex justify-between py-3">
-          <span>Theme</span>
-          <span>Dark</span>
-        </p>
+    <div className="brutal-stack w-full">
+      <div className="w-full bg-brand-purple p-6">
+        <p className="text-sm font-bold uppercase text-base-black">Settings</p>
       </div>
-      <p className="mt-4 text-xs text-[var(--text-muted)]">Placeholder — settings panel coming soon.</p>
-    </GlassCard>
+      {[
+        ["Match alerts", "On"],
+        ["Pulse threshold", "75+"],
+        ["Theme", "Editorial"],
+      ].map(([label, value]) => (
+        <p
+          key={label}
+          className="flex w-full justify-between border-0 border-t-4 border-base-black bg-base-offwhite p-6 font-bold text-base-black"
+        >
+          <span>{label}</span>
+          <span>{value}</span>
+        </p>
+      ))}
+    </div>
   );
 }
 
@@ -88,46 +82,41 @@ function ProfileSection() {
     : [];
 
   return (
-    <GlassCard variant="primary">
-      <p className="text-xs uppercase tracking-[0.24em] text-[var(--text-muted)]">
-        Profile summary
-      </p>
+    <div className="brutal-stack w-full">
+      <div className="w-full bg-base-black p-6">
+        <p className="text-sm font-bold uppercase text-brand-lime">Profile</p>
+        {publicKey ? (
+          <p className="mt-2 bg-base-black px-0 py-2 font-mono text-xs font-bold text-base-offwhite">
+            {publicKey.toBase58().slice(0, 8)}…{publicKey.toBase58().slice(-6)}
+          </p>
+        ) : (
+          <p className="mt-2 font-bold text-base-offwhite">Guest Fan</p>
+        )}
+      </div>
       {!publicKey ? (
-        <p className="mt-4 text-sm text-[var(--text-secondary)]">
+        <p className="w-full bg-base-offwhite p-8 font-bold text-base-black">
           Connect your wallet to sync predictions and live claims.
         </p>
       ) : mine.length === 0 ? (
-        <p className="mt-4 text-sm text-[var(--text-secondary)]">
+        <p className="w-full bg-base-offwhite p-8 font-bold text-base-black">
           No predictions yet. Visit Prediction League to submit your first call.
         </p>
       ) : (
-        <div className="mt-4 space-y-3">
-          {mine.map((p) => (
-            <div key={p.id} className="rounded-lg border border-white/8 px-4 py-3">
-              <p className="font-medium">
-                {p.homeTeam} vs {p.awayTeam}
-              </p>
-              <p className="mt-1 text-sm text-[var(--text-secondary)]">
-                {p.homeScore}-{p.awayScore}
-                {p.claimedLive ? " · Live claim" : ""}
-              </p>
-            </div>
-          ))}
-        </div>
+        mine.map((p) => (
+          <div
+            key={p.id}
+            className="w-full border-0 border-t-4 border-base-black bg-base-offwhite p-6"
+          >
+            <p className="text-xl font-black uppercase text-base-black">
+              {p.homeTeam} vs {p.awayTeam}
+            </p>
+            <p className="mt-2 font-bold text-base-black">
+              {p.homeScore}-{p.awayScore}
+              {p.claimedLive ? " · Live claim" : ""}
+            </p>
+          </div>
+        ))
       )}
-    </GlassCard>
-  );
-}
-
-function NftSection() {
-  return (
-    <div>
-      <PageHeader
-        eyebrow="Collectibles"
-        title="NFT Match Cards"
-        description="Mint moments from explosive pulse intervals."
-      />
-      <NftMatchCardsGrid />
     </div>
   );
 }
@@ -136,39 +125,27 @@ export default function MyPulseHubPage() {
   const isAuthenticated = useIsAuthenticated();
 
   return (
-    <section className="pulse-page-bg pulse-page">
-      <div className="mx-auto max-w-4xl space-y-12">
-        <PageHeader
-          eyebrow="Hub"
-          title="My Pulse"
-          description="Profile, trophies, notifications, NFT cards, and settings in one place."
-        />
+    <div className="brutal-stack w-full">
+      <PageHeader
+        eyebrow="Hub"
+        title="My Pulse"
+        description="Profile, trophies, notifications, NFT cards, and settings."
+      />
 
-        {!isAuthenticated && <SignInPrompt />}
+      {!isAuthenticated && <SignInPrompt />}
+      {isAuthenticated && <ProfileSection />}
 
-        {isAuthenticated && (
-          <div id="profile">
-            <ProfileSection />
-          </div>
-        )}
+      <PageHeader eyebrow="Achievements" title="Trophy Cabinet" />
+      <TrophyCabinetView />
 
-        <div id="trophy-cabinet">
-          <PageHeader eyebrow="Achievements" title="Trophy Cabinet" />
-          <TrophyCabinetView />
-        </div>
+      <PageHeader eyebrow="Alerts" title="Notifications" />
+      <NotificationsSection />
 
-        <div id="notifications">
-          <NotificationsSection />
-        </div>
+      <PageHeader eyebrow="Collectibles" title="NFT Match Cards" />
+      <NftMatchCardsGrid />
 
-        <div id="nft-match-cards">
-          <NftSection />
-        </div>
-
-        <div id="settings">
-          <SettingsSection />
-        </div>
-      </div>
-    </section>
+      <PageHeader eyebrow="Config" title="Settings" />
+      <SettingsSection />
+    </div>
   );
 }

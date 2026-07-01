@@ -1,7 +1,5 @@
 "use client";
 
-import { GlassCard } from "@/components/ui/glass-card";
-
 const MOCK_BADGES = [
   { id: "early-bird", label: "Early Pulse", detail: "Followed 10 live matches" },
   { id: "momentum", label: "Momentum Reader", detail: "Spotted 3 turning points" },
@@ -16,40 +14,36 @@ const MOCK_STATS = [
 
 export function TrophyCabinetView() {
   return (
-    <div className="space-y-6">
-      <div className="grid gap-4 sm:grid-cols-3">
+    <div className="brutal-stack w-full">
+      <div className="grid w-full grid-cols-3 gap-0">
         {MOCK_STATS.map((stat) => (
-          <GlassCard key={stat.label} className="text-center">
-            <p className="pulse-score text-4xl text-white">{stat.value}</p>
-            <p className="mt-2 text-sm text-[var(--text-secondary)]">{stat.label}</p>
-          </GlassCard>
+          <div
+            key={stat.label}
+            className="border-0 border-r-4 border-base-black bg-base-offwhite p-8 text-center last:border-r-0"
+          >
+            <p className="text-5xl font-black text-base-black">{stat.value}</p>
+            <p className="mt-2 text-xs font-bold uppercase text-base-black">{stat.label}</p>
+          </div>
         ))}
       </div>
 
-      <GlassCard variant="primary">
-        <p className="text-xs uppercase tracking-[0.24em] text-[var(--text-muted)]">
-          Badges
-        </p>
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+      <div className="w-full border-0 border-t-4 border-base-black bg-base-offwhite p-8">
+        <p className="text-sm font-bold uppercase tracking-widest text-base-black">Badges</p>
+        <div className="brutal-stack mt-0 w-full">
           {MOCK_BADGES.map((badge) => (
             <div
               key={badge.id}
-              className="rounded-xl border border-white/8 bg-white/[0.03] p-5"
+              className="w-full border-0 border-l-[20px] border-brand-lime border-t-4 border-base-black bg-base-offwhite p-8"
             >
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--pulse-purple)]/15 text-lg text-[var(--pulse-violet-soft)]">
-                ◆
-              </div>
-              <p className="font-medium">{badge.label}</p>
-              <p className="mt-1 text-sm text-[var(--text-secondary)]">
-                {badge.detail}
-              </p>
+              <p className="text-2xl font-black uppercase text-base-black">{badge.label}</p>
+              <p className="mt-2 font-bold text-base-black">{badge.detail}</p>
             </div>
           ))}
         </div>
-        <p className="mt-6 text-xs text-[var(--text-muted)]">
-          Placeholder — NFT trophies and on-chain achievements coming later.
+        <p className="mt-8 text-xs font-bold uppercase text-base-black">
+          Placeholder — NFT trophies coming later.
         </p>
-      </GlassCard>
+      </div>
     </div>
   );
 }

@@ -3,7 +3,6 @@
 import { useWallet } from "@solana/wallet-adapter-react";
 import { usePredictionsStore } from "@/stores/predictions-store";
 import { PageHeader } from "@/components/layout/page-header";
-import { GlassCard } from "@/components/ui/glass-card";
 
 export default function MyPulsePage() {
   const { publicKey } = useWallet();
@@ -13,52 +12,37 @@ export default function MyPulsePage() {
     : [];
 
   return (
-    <section className="pulse-page-bg pulse-page">
-      <div className="mx-auto max-w-4xl">
-        <PageHeader
-          eyebrow="Profile"
-          title="My Pulse"
-          description="Your submitted predictions and live claims."
-        />
+    <div className="brutal-stack w-full">
+      <PageHeader
+        eyebrow="Profile"
+        title="My Pulse"
+        description="Your submitted predictions and live claims."
+      />
 
-        {!publicKey ? (
-          <GlassCard>
-            <p className="text-[var(--text-secondary)]">
-              Connect your wallet to view your prediction history and live claims.
-              Browsing matches and Pulse intelligence does not require a wallet.
+      {!publicKey ? (
+        <p className="w-full border-0 border-l-[20px] border-brand-lime bg-base-offwhite p-8 font-bold text-base-black">
+          Connect your wallet to view your prediction history. Browsing does not require a wallet.
+        </p>
+      ) : mine.length === 0 ? (
+        <p className="w-full bg-base-offwhite p-8 font-bold text-base-black">
+          No predictions yet. Visit Predict to submit your first call.
+        </p>
+      ) : (
+        mine.map((p) => (
+          <div
+            key={p.id}
+            className="w-full border-0 border-t-4 border-base-black bg-base-offwhite p-8"
+          >
+            <p className="text-2xl font-black uppercase text-base-black">
+              {p.homeTeam} vs {p.awayTeam}
             </p>
-          </GlassCard>
-        ) : mine.length === 0 ? (
-          <GlassCard>
-            <p className="text-[var(--text-secondary)]">
-              No predictions yet. Visit Predict to submit your first call.
+            <p className="mt-2 font-bold text-base-black">
+              {p.winner === "home" ? p.homeTeam : p.winner === "away" ? p.awayTeam : "Draw"} ·{" "}
+              {p.homeScore}-{p.awayScore}
             </p>
-          </GlassCard>
-        ) : (
-          <div className="space-y-4">
-            {mine.map((p) => (
-              <GlassCard key={p.id}>
-                <p className="font-medium">
-                  {p.homeTeam} vs {p.awayTeam}
-                </p>
-                <p className="mt-2 text-sm text-[var(--text-secondary)]">
-                  {p.winner === "home"
-                    ? p.homeTeam
-                    : p.winner === "away"
-                      ? p.awayTeam
-                      : "Draw"}{" "}
-                  · {p.homeScore}-{p.awayScore}
-                  {p.firstScorer ? ` · ${p.firstScorer}` : ""}
-                </p>
-                <p className="mt-2 text-xs text-[var(--text-muted)]">
-                  {new Date(p.createdAt).toLocaleString()}
-                  {p.claimedLive ? " · Live claim recorded" : ""}
-                </p>
-              </GlassCard>
-            ))}
           </div>
-        )}
-      </div>
-    </section>
+        ))
+      )}
+    </div>
   );
 }

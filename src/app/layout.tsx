@@ -25,12 +25,12 @@ const sora = Sora({
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Pulse — Football Intelligence",
-  description: "The pulse of the game. Live.",
+  title: "Pulse — The pulse of the game. Live.",
+  description: "Brutalist editorial football intelligence.",
 };
 
 export default function RootLayout({
@@ -43,16 +43,10 @@ export default function RootLayout({
       lang="en"
       className={`${spaceGrotesk.variable} ${bebasNeue.variable} ${sora.variable} ${dmSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-[var(--bg-base)] text-[var(--text-primary)]">
-        <div className="pulse-ambient pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden>
-          <div className="pulse-orb pulse-orb-violet" />
-          <div className="pulse-orb pulse-orb-coral" />
-        </div>
-        <div className="relative z-10">
-          <AppProviders>
-            <AppShell>{children}</AppShell>
-          </AppProviders>
-        </div>
+      <body className="min-h-full bg-base-offwhite text-base-black">
+        <AppProviders>
+          <AppShell>{children}</AppShell>
+        </AppProviders>
       </body>
     </html>
   );

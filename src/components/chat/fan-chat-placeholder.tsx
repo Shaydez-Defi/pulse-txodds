@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { GlassCard } from "@/components/ui/glass-card";
 
 const MOCK_MESSAGES = [
   {
@@ -28,61 +27,49 @@ export function FanChatPlaceholder() {
   const [draft, setDraft] = useState("");
 
   return (
-    <GlassCard variant="primary" className="flex min-h-[28rem] flex-col">
-      <div className="mb-4 flex items-center justify-between border-b border-white/8 pb-4">
+    <div className="brutal-stack min-h-[28rem] w-full">
+      <div className="flex w-full items-center justify-between bg-base-black p-6 text-base-offwhite">
         <div>
-          <p className="pulse-eyebrow flex items-center gap-2 text-[var(--pulse-coral)]">
-            <span className="pulse-live-dot" />
-            Live
-          </p>
-          <p className="mt-1 font-medium">Match room</p>
+          <p className="text-sm font-bold uppercase text-brand-lime">Live</p>
+          <p className="text-2xl font-black uppercase">Match room</p>
         </div>
-        <span className="rounded-full bg-white/5 px-3 py-1 text-xs text-[var(--text-muted)]">
+        <span className="bg-brand-purple px-4 py-2 text-xs font-bold uppercase text-base-black">
           128 watching
         </span>
       </div>
 
-      <ul className="flex-1 space-y-4 overflow-y-auto pr-1">
+      <ul className="brutal-stack w-full flex-1">
         {MOCK_MESSAGES.map((msg) => (
-          <li key={msg.id} className="rounded-xl bg-white/[0.03] px-4 py-3">
+          <li
+            key={msg.id}
+            className="w-full border-0 border-t-4 border-base-black bg-base-offwhite p-6"
+          >
             <div className="flex items-baseline justify-between gap-2">
-              <span className="text-sm font-medium text-white/90">{msg.user}</span>
-              <span className="text-[10px] uppercase tracking-wide text-[var(--text-muted)]">
-                {msg.time}
-              </span>
+              <span className="font-black uppercase text-base-black">{msg.user}</span>
+              <span className="text-xs font-bold uppercase text-base-black">{msg.time}</span>
             </div>
-            <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
-              {msg.text}
-            </p>
+            <p className="mt-2 text-lg font-bold text-base-black">{msg.text}</p>
           </li>
         ))}
       </ul>
 
       <form
-        className="mt-4 flex gap-2 border-t border-white/8 pt-4"
-        onSubmit={(e) => {
-          e.preventDefault();
-          setDraft("");
-        }}
+        className="flex w-full gap-0 border-0 border-t-4 border-base-black"
+        onSubmit={(e) => e.preventDefault()}
       >
         <input
-          type="text"
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
-          placeholder="Join the conversation…"
-          className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none placeholder:text-[var(--text-muted)] focus:border-white/20"
+          placeholder="Say something…"
+          className="flex-1 border-0 bg-base-offwhite px-6 py-4 font-bold text-base-black outline-none"
         />
         <button
           type="submit"
-          className="rounded-xl bg-white px-5 py-3 text-sm font-medium text-black"
+          className="border-0 border-l-4 border-base-black bg-brand-lime px-8 py-4 font-bold uppercase text-base-black"
         >
           Send
         </button>
       </form>
-
-      <p className="mt-3 text-center text-xs text-[var(--text-muted)]">
-        Placeholder UI — live chat backend not wired yet.
-      </p>
-    </GlassCard>
+    </div>
   );
 }

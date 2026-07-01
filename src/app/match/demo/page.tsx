@@ -3,13 +3,11 @@ import { DEMO_ANTICIPATION_MESSAGE, DEMO_MATCH } from "@/lib/demo-match-data";
 
 export default function DemoMatchPage() {
   return (
-    <section className="pulse-page-bg pulse-page">
-      <div className="mx-auto max-w-7xl">
-        <MatchDetailView
-          match={DEMO_MATCH}
-          anticipationMessage={DEMO_ANTICIPATION_MESSAGE}
-        />
-      </div>
-    </section>
+    <div className="brutal-stack w-full">
+      <MatchDetailView
+        match={DEMO_MATCH}
+        anticipationMessage={DEMO_ANTICIPATION_MESSAGE}
+      />
+    </div>
   );
 }

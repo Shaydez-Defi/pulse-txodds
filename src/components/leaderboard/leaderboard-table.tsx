@@ -3,14 +3,15 @@
 import { useWallet } from "@solana/wallet-adapter-react";
 import { usePredictionsStore } from "@/stores/predictions-store";
 import type { LeaderboardEntry } from "@/lib/types";
-import { GlassCard } from "@/components/ui/glass-card";
 import clsx from "clsx";
 
 function shortenWallet(wallet: string) {
   return `${wallet.slice(0, 4)}…${wallet.slice(-4)}`;
 }
 
-function buildLeaderboard(predictions: ReturnType<typeof usePredictionsStore.getState>["predictions"]): LeaderboardEntry[] {
+function buildLeaderboard(
+  predictions: ReturnType<typeof usePredictionsStore.getState>["predictions"]
+): LeaderboardEntry[] {
   const map = new Map<string, { total: number; correct: number }>();
 
   for (const p of predictions) {
@@ -44,42 +45,32 @@ export function LeaderboardTable() {
   const myWallet = publicKey?.toBase58();
 
   return (
-    <GlassCard variant="primary" className="overflow-x-auto">
-      <table className="w-full min-w-[560px] text-left text-sm">
-        <thead>
-          <tr className="border-b border-white/8 text-[var(--text-muted)]">
-            <th className="pb-4 pr-4 font-medium">Rank</th>
-            <th className="pb-4 pr-4 font-medium">Wallet</th>
-            <th className="pb-4 pr-4 font-medium">Predictions</th>
-            <th className="pb-4 pr-4 font-medium">Correct</th>
-            <th className="pb-4 font-medium">Accuracy</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => {
-            const isMe = myWallet && row.wallet.includes(myWallet.slice(0, 4));
-            return (
-              <tr
-                key={row.rank}
-                className={clsx(
-                  "border-b border-white/5",
-                  isMe && "bg-white/5"
-                )}
-              >
-                <td className="py-4 pr-4">
-                  <span className="pulse-score text-xl text-white">{row.rank}</span>
-                </td>
-                <td className="py-4 pr-4 font-mono">{row.wallet}</td>
-                <td className="py-4 pr-4">{row.predictions}</td>
-                <td className="py-4 pr-4">{row.correct}</td>
-                <td className="py-4 font-medium text-[var(--pulse-violet-soft)]">
-                  {row.accuracy}%
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </GlassCard>
+    <div className="brutal-stack w-full">
+      <div className="grid w-full grid-cols-5 gap-0 bg-base-black p-4 text-xs font-bold uppercase text-brand-lime">
+        <span>Rank</span>
+        <span>Wallet</span>
+        <span>Predictions</span>
+        <span>Correct</span>
+        <span>Accuracy</span>
+      </div>
+      {rows.map((row) => {
+        const isMe = myWallet && row.wallet.includes(myWallet.slice(0, 4));
+        return (
+          <div
+            key={row.rank}
+            className={clsx(
+              "grid w-full grid-cols-5 gap-0 border-0 border-t-4 border-base-black p-6 font-bold",
+              isMe ? "bg-brand-lime text-base-black" : "bg-base-offwhite text-base-black"
+            )}
+          >
+            <span className="text-3xl font-black">{row.rank}</span>
+            <span className="font-mono">{row.wallet}</span>
+            <span>{row.predictions}</span>
+            <span>{row.correct}</span>
+            <span>{row.accuracy}%</span>
+          </div>
+        );
+      })}
+    </div>
   );
 }

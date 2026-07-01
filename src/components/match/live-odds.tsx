@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import type { OddsTriple } from "@/lib/types";
 
 export function LiveOdds({ odds }: { odds: OddsTriple | null }) {
@@ -13,31 +12,19 @@ export function LiveOdds({ odds }: { odds: OddsTriple | null }) {
   ];
 
   return (
-    <div>
-      <h3 className="font-editorial mb-5 text-lg font-semibold">Win probability</h3>
-      <div className="space-y-5">
-        {rows.map((row) => (
-          <div key={row.label}>
-            <div className="mb-2 flex justify-between text-sm">
-              <span className="text-[var(--text-secondary)]">{row.label}</span>
-              <span className="font-mono text-[var(--text-primary)]">
-                {row.value.toFixed(1)}%
-              </span>
-            </div>
-            <div className="h-2 overflow-hidden rounded-full bg-white/5">
-              <motion.div
-                className="h-full rounded-full"
-                style={{
-                  background: "linear-gradient(90deg, var(--pulse-violet) 0%, var(--pulse-purple) 100%)",
-                }}
-                initial={{ width: 0 }}
-                animate={{ width: `${row.value}%` }}
-                transition={{ duration: 0.6 }}
-              />
-            </div>
+    <div className="brutal-stack w-full">
+      <h3 className="text-2xl font-black uppercase text-base-black">Win probability</h3>
+      {rows.map((row) => (
+        <div key={row.label} className="w-full border-0 border-t-4 border-base-black pt-6">
+          <div className="mb-2 flex justify-between font-bold text-base-black">
+            <span>{row.label}</span>
+            <span>{row.value.toFixed(1)}%</span>
           </div>
-        ))}
-      </div>
+          <div className="h-8 w-full bg-base-black">
+            <div className="h-full bg-brand-purple" style={{ width: `${row.value}%` }} />
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

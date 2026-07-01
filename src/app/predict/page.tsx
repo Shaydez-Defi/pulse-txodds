@@ -9,19 +9,15 @@ export default function PredictPage() {
   const upcoming = (data ?? []).filter((m) => m.status !== "finished");
 
   return (
-    <section className="pulse-page-bg pulse-page">
-      <div className="mx-auto max-w-4xl">
-        <PageHeader
-          eyebrow="Predict"
-          title="Call the match"
-          description="Submit predictions before kickoff. Claim live calls during the match with your wallet."
-        />
-        <div className="space-y-8">
-          {upcoming.map((match) => (
-            <PredictFixtureCard key={match.fixtureId} match={match} />
-          ))}
-        </div>
-      </div>
-    </section>
+    <div className="brutal-stack w-full">
+      <PageHeader
+        eyebrow="Predict"
+        title="Call the match"
+        description="Submit predictions before kickoff. Claim live calls during the match."
+      />
+      {upcoming.map((match) => (
+        <PredictFixtureCard key={match.fixtureId} match={match} />
+      ))}
+    </div>
   );
 }
