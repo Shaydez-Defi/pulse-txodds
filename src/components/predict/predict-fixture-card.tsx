@@ -138,8 +138,9 @@ export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
         {match.status === "live" && submitted && predictionId && (
           <button
             type="button"
-            onClick={() => claimLive(predictionId)}
-            className="rounded-full border border-white/12 px-6 py-2.5 text-sm"
+            onClick={() => publicKey && claimLive(predictionId)}
+            disabled={!publicKey}
+            className="rounded-full border border-white/12 px-6 py-2.5 text-sm disabled:opacity-40"
           >
             I called it
           </button>
@@ -148,7 +149,7 @@ export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
 
       {!publicKey && (
         <p className="mt-4 text-sm text-[var(--text-muted)]">
-          Connect Phantom to submit predictions.
+          Connect Phantom to submit predictions or claim live calls.
         </p>
       )}
     </GlassCard>

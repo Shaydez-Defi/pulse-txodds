@@ -40,6 +40,85 @@ body {
   font-family: var(--font-space-grotesk), system-ui, sans-serif;
 }
 
+/* Hero — portrait video, full-screen cover */
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero-video-container {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #050505;
+}
+
+.hero-video-element {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  filter: brightness(0.88) contrast(1.08) saturate(1.12);
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+.hero-video-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0.05) 35%,
+    rgba(0, 0, 0, 0.45) 70%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-content-panel {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.55) 0%,
+    rgba(0, 0, 0, 0.72) 100%
+  );
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
+}
+
+.hero-content-panel h1,
+.hero-content-panel p {
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.8);
+}
+
+@media (min-width: 768px) {
+  .hero-content-panel {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+  }
+
+  .hero-content-panel h1,
+  .hero-content-panel p {
+    text-shadow: 0 2px 32px rgba(0, 0, 0, 0.85);
+  }
+}
+
 .glass-card {
   background: var(--surface-glass);
   border: 1px solid var(--border-subtle);

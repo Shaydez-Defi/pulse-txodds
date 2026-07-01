@@ -1,19 +1,18 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import clsx from "clsx";
 import { HERO_VIDEO_SRC } from "@/lib/hero-video";
-import { AnimatedPitchScene } from "./animated-pitch-scene";
 
-export function HeroVideoBackground() {
-  const ref = useRef<HTMLVideoElement>(null);
-  const [playing, setPlaying] = useState(false);
+type HeroVideoBackgroundProps = {
+  overlayClassName?: string;
+};
 
-  const handleError = useCallback(() => setPlaying(false), []);
-  const handlePlaying = useCallback(() => setPlaying(true), []);
+export function HeroVideoBackground({ overlayClassName }: HeroVideoBackgroundProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const video = ref.current;
+    const video = videoRef.current;
     if (!video) return;
 
     video.muted = true;
@@ -21,60 +20,38 @@ export function HeroVideoBackground() {
     video.playsInline = true;
     video.setAttribute("webkit-playsinline", "true");
 
-    const attemptPlay = async () => {
+    const play = async () => {
       try {
         await video.play();
-        setPlaying(true);
       } catch {
-        setPlaying(false);
+        /* autoplay blocked — user gesture will start playback */
       }
     };
 
-    video.addEventListener("canplay", attemptPlay);
-    video.addEventListener("error", handleError);
-    video.load();
-    void attemptPlay();
+    video.addEventListener("canplay", play);
+    void play();
 
-    return () => {
-      video.removeEventListener("canplay", attemptPlay);
-      video.removeEventListener("error", handleError);
-    };
-  }, [handleError]);
+    return () => video.removeEventListener("canplay", play);
+  }, []);
 
   return (
-    <div className="absolute inset-0 overflow-hidden bg-[#040806]">
-      <motion.div
-        className="absolute inset-0"
-        animate={{ opacity: playing ? 0 : 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
-        <AnimatedPitchScene />
-      </motion.div>
-
-      <div className="absolute inset-0 overflow-hidden">
-        <video
-          ref={ref}
-          className="absolute left-1/2 top-1/2 min-h-full min-w-full -translate-x-1/2 -translate-y-1/2 object-cover object-center"
-          src={HERO_VIDEO_SRC}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          onPlaying={handlePlaying}
-          onError={handleError}
-          style={{
-            width: "auto",
-            height: "auto",
-            maxWidth: "none",
-            transform: "translate(-50%, -50%) translateZ(0)",
-            WebkitTransform: "translate(-50%, -50%) translateZ(0)",
-          }}
-        />
-      </div>
-
+    <div className="hero-video-container">
+      <video
+        key={HERO_VIDEO_SRC}
+        ref={videoRef}
+        className="hero-video-element"
+        src={HERO_VIDEO_SRC}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+      />
       <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/55"
+        className={clsx(
+          "absolute inset-0 z-[1] bg-gradient-to-b via-black/50 to-black/80",
+          overlayClassName ?? "from-black/40"
+        )}
         aria-hidden
       />
     </div>

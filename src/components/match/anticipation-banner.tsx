@@ -2,7 +2,13 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 
-export function AnticipationBanner({ show }: { show: boolean }) {
+export function AnticipationBanner({
+  show,
+  message = "High pressure detected — a decisive moment is becoming increasingly likely.",
+}: {
+  show: boolean;
+  message?: string;
+}) {
   return (
     <AnimatePresence>
       {show && (
@@ -12,9 +18,7 @@ export function AnticipationBanner({ show }: { show: boolean }) {
           exit={{ opacity: 0, y: -8 }}
           className="rounded-xl border border-[var(--accent-red)]/40 bg-[var(--accent-red)]/8 px-6 py-4"
         >
-          <p className="text-sm text-[#d4b0a8]">
-            High pressure detected — a decisive moment is becoming increasingly likely.
-          </p>
+          <p className="text-sm text-[#d4b0a8]">{message}</p>
         </motion.div>
       )}
     </AnimatePresence>

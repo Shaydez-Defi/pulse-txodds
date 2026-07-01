@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import type { MatchDetail } from "@/lib/types";
 import { useMatchDetail } from "@/hooks/use-match-detail";
 import { useStadiumStore } from "@/stores/stadium-store";
 import { AnticipationBanner } from "./anticipation-banner";
@@ -11,14 +12,34 @@ import { PlayerMomentumList } from "./player-momentum";
 import { PressureHeatmap } from "./pressure-heatmap";
 import { StoryCards } from "./story-cards";
 
-export function MatchDetailView({ fixtureId }: { fixtureId: number }) {
-  const { data: match, isLoading } = useMatchDetail(fixtureId);
+export function MatchDetailView({
+  fixtureId,
+  match: matchProp,
+  anticipationMessage,
+}: {
+  fixtureId?: number;
+  match?: MatchDetail;
+  anticipationMessage?: string;
+}) {
+  const { data: fetchedMatch, isLoading } = useMatchDetail(
+    fixtureId ?? 0,
+    !matchProp
+  );
+  const match = matchProp ?? fetchedMatch;
   const theme = useStadiumStore((s) => s.theme);
 
-  if (isLoading || !match) {
+  if (!matchProp && isLoading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center text-[var(--text-muted)]">
         Loading match intelligence…
+      </div>
+    );
+  }
+
+  if (!match) {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center text-[var(--text-muted)]">
+        Match not found.
       </div>
     );
   }
@@ -58,7 +79,10 @@ export function MatchDetailView({ fixtureId }: { fixtureId: number }) {
         </div>
       </div>
 
-      <AnticipationBanner show={match.pulse > 75} />
+      <AnticipationBanner
+        show={match.anticipation || match.pulse > 75}
+        message={anticipationMessage}
+      />
 
       <div className="grid gap-8 lg:grid-cols-[240px_1fr]">
         <div className="flex justify-center lg:justify-start">

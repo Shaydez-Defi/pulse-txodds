@@ -24,7 +24,8 @@ export default function MyPulsePage() {
         {!publicKey ? (
           <GlassCard>
             <p className="text-[var(--text-secondary)]">
-              Connect your wallet to view your prediction history.
+              Connect your wallet to view your prediction history and live claims.
+              Browsing matches and Pulse intelligence does not require a wallet.
             </p>
           </GlassCard>
         ) : mine.length === 0 ? (

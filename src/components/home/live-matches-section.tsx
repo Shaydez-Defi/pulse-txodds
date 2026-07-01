@@ -9,7 +9,7 @@ export function LiveMatchesSection() {
   const live = data?.filter((m) => m.status === "live") ?? [];
 
   return (
-    <section className="relative px-6 py-24">
+    <section id="live" className="relative scroll-mt-8 px-6 py-24">
       <AuroraOrbs />
       <div className="relative mx-auto max-w-7xl">
         <div className="mb-12 flex items-end justify-between">

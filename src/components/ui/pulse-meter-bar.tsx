@@ -11,7 +11,7 @@ export function PulseMeterBar({ value, className }: PulseMeterBarProps) {
 
   return (
     <div className={className}>
-      <div className="mb-2 flex items-center justify-between text-[11px] uppercase tracking-widest text-[var(--text-muted)]">
+      <div className="mb-2 flex items-center justify-between text-xs uppercase tracking-wider text-white/50">
         <span>Pulse</span>
         <span style={{ color }}>{value}</span>
       </div>

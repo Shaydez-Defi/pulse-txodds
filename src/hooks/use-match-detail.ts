@@ -10,11 +10,11 @@ async function fetchMatch(id: number): Promise<MatchDetail> {
   return data.match;
 }
 
-export function useMatchDetail(fixtureId: number) {
+export function useMatchDetail(fixtureId: number, enabled = true) {
   return useQuery({
     queryKey: ["match", fixtureId],
     queryFn: () => fetchMatch(fixtureId),
     refetchInterval: 30_000,
-    enabled: Number.isFinite(fixtureId),
+    enabled: enabled && Number.isFinite(fixtureId),
   });
 }

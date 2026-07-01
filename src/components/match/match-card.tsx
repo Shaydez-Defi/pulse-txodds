@@ -23,9 +23,9 @@ export function MatchCard({ match }: { match: EnrichedMatch }) {
   return (
     <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.2 }}>
       <Link href={`/match/${match.fixtureId}`}>
-        <GlassCard className="relative block">
+        <GlassCard className="relative block overflow-hidden p-5 transition-all duration-200 hover:border-white/20">
           {match.anticipation && (
-            <div className="absolute right-4 top-4 rounded-full border border-[var(--accent-red)]/40 bg-[var(--accent-red)]/10 px-3 py-1 text-[10px] uppercase tracking-widest text-[#c9a0a0] animate-pulse">
+            <div className="absolute right-3 top-3 rounded-full border border-[var(--accent-red)]/40 bg-[var(--accent-red)]/10 px-2 py-1 text-xs uppercase tracking-widest text-[#c9a0a0] animate-pulse">
               High pressure
             </div>
           )}
@@ -47,10 +47,10 @@ export function MatchCard({ match }: { match: EnrichedMatch }) {
               </p>
               <p
                 className={clsx(
-                  "mt-1 text-xs uppercase tracking-widest",
-                  live && "text-[var(--accent-green)]",
-                  finished && "text-[var(--text-muted)]",
-                  !live && !finished && "text-[var(--text-secondary)]"
+                  "mt-1 uppercase tracking-widest",
+                  live && "text-sm text-green-400",
+                  finished && "text-xs text-[var(--text-muted)]",
+                  !live && !finished && "text-xs text-[var(--text-secondary)]"
                 )}
               >
                 {match.minuteLabel}
