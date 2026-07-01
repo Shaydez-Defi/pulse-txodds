@@ -1,6 +1,10 @@
-export function PulseLogo() {
+export function PulseLogo({ light = false }: { light?: boolean }) {
   return (
-    <span className="font-headline text-2xl font-black uppercase tracking-tighter text-base-black">
+    <span
+      className={`font-headline text-xl font-black uppercase tracking-tighter ${
+        light ? "text-base-offwhite" : "text-base-black"
+      }`}
+    >
       Pulse
     </span>
   );

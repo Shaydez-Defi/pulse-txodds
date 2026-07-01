@@ -43,7 +43,7 @@ export default function RootLayout({
       lang="en"
       className={`${spaceGrotesk.variable} ${bebasNeue.variable} ${sora.variable} ${dmSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-base-offwhite text-base-black">
+      <body className="min-h-full overflow-x-hidden bg-base-black text-base-black">
         <AppProviders>
           <AppShell>{children}</AppShell>
         </AppProviders>
