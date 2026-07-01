@@ -4,10 +4,14 @@ import { useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import type { EnrichedMatch } from "@/lib/types";
 import { usePredictionsStore } from "@/stores/predictions-store";
+import { useAuthModalStore } from "@/stores/auth-modal-store";
+import { useIsAuthenticated } from "@/hooks/use-is-authenticated";
 import { GlassCard } from "@/components/ui/glass-card";
 
 export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
   const { publicKey } = useWallet();
+  const isAuthenticated = useIsAuthenticated();
+  const openAuthModal = useAuthModalStore((s) => s.open);
   const addPrediction = usePredictionsStore((s) => s.addPrediction);
   const claimLive = usePredictionsStore((s) => s.claimLive);
 
@@ -24,7 +28,7 @@ export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
     minute: "2-digit",
   });
 
-  function submit() {
+  function doSubmit() {
     if (!publicKey) return;
     const id = `${match.fixtureId}-${Date.now()}`;
     addPrediction({
@@ -41,6 +45,26 @@ export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
     });
     setPredictionId(id);
     setSubmitted(true);
+  }
+
+  function submit() {
+    if (!isAuthenticated || !publicKey) {
+      openAuthModal(doSubmit);
+      return;
+    }
+    doSubmit();
+  }
+
+  function handleClaimLive() {
+    if (!predictionId) return;
+    const claim = () => {
+      if (publicKey) claimLive(predictionId);
+    };
+    if (!isAuthenticated || !publicKey) {
+      openAuthModal(claim);
+      return;
+    }
+    claim();
   }
 
   return (
@@ -130,7 +154,7 @@ export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
         <button
           type="button"
           onClick={submit}
-          disabled={!publicKey || submitted}
+          disabled={submitted}
           className="rounded-full bg-white px-6 py-2.5 text-sm font-medium text-black disabled:opacity-40"
         >
           {submitted ? "Prediction saved" : "Submit prediction"}
@@ -138,20 +162,13 @@ export function PredictFixtureCard({ match }: { match: EnrichedMatch }) {
         {match.status === "live" && submitted && predictionId && (
           <button
             type="button"
-            onClick={() => publicKey && claimLive(predictionId)}
-            disabled={!publicKey}
-            className="rounded-full border border-white/12 px-6 py-2.5 text-sm disabled:opacity-40"
+            onClick={handleClaimLive}
+            className="rounded-full border border-white/12 px-6 py-2.5 text-sm"
           >
             I called it
           </button>
         )}
       </div>
-
-      {!publicKey && (
-        <p className="mt-4 text-sm text-[var(--text-muted)]">
-          Connect Phantom to submit predictions or claim live calls.
-        </p>
-      )}
     </GlassCard>
   );
 }

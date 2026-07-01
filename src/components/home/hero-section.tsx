@@ -4,8 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { HeroVideoBackground } from "./hero-video-background";
-import { useAuthStore } from "@/stores/auth-store";
-import { AuthModal } from "@/components/auth/auth-modal";
 import clsx from "clsx";
 
 const STADIUM_THEMES = [
@@ -19,18 +17,9 @@ const STADIUM_THEMES = [
 type StadiumId = (typeof STADIUM_THEMES)[number]["id"];
 
 export function HeroSection() {
-  const user = useAuthStore((s) => s.user);
-  const [authModalOpen, setAuthModalOpen] = useState(false);
   const [activeStadium, setActiveStadium] = useState<StadiumId>("wembley");
 
   const activeTheme = STADIUM_THEMES.find((s) => s.id === activeStadium)!;
-
-  function handleEnterPulse(e: React.MouseEvent) {
-    if (!user) {
-      e.preventDefault();
-      setAuthModalOpen(true);
-    }
-  }
 
   return (
     <section className="hero-section flex flex-col items-center justify-center text-center">
@@ -71,7 +60,6 @@ export function HeroSection() {
             <div className="flex gap-4 justify-center">
               <Link
                 href="/matches"
-                onClick={handleEnterPulse}
                 className="rounded-full bg-white px-8 py-3 font-semibold text-black shadow-lg shadow-black/40 transition-all hover:scale-[1.02] hover:opacity-90 active:scale-[0.98]"
               >
                 Enter Pulse
@@ -88,7 +76,7 @@ export function HeroSection() {
       </div>
 
       <div className="absolute bottom-6 left-0 right-0 z-10 px-4">
-        <div className="mx-auto flex max-w-2xl gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="mx-auto flex max-w-2xl gap-2 overflow-x-auto pb-1">
           {STADIUM_THEMES.map((stadium) => (
             <button
               key={stadium.id}
@@ -106,8 +94,6 @@ export function HeroSection() {
           ))}
         </div>
       </div>
-
-      <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />
     </section>
   );
 }

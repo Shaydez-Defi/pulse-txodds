@@ -5,15 +5,17 @@ import { usePathname } from "next/navigation";
 import clsx from "clsx";
 
 const TABS = [
-  { href: "/", label: "Home", icon: HomeIcon },
+  { href: "/matches", label: "Home", icon: HomeIcon },
   { href: "/matches", label: "Matches", icon: MatchesIcon },
   { href: "/predict", label: "Predict", icon: PredictIcon },
   { href: "/leaderboard", label: "Leaderboard", icon: BoardIcon },
   { href: "/my-pulse", label: "My Pulse", icon: PulseIcon },
 ] as const;
 
-function isActive(pathname: string, href: string) {
-  if (href === "/") return pathname === "/";
+function isActive(pathname: string, href: string, label: string) {
+  if (label === "Home" || href === "/matches") {
+    return pathname === "/matches" || pathname.startsWith("/match/");
+  }
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
@@ -24,11 +26,11 @@ export function MobileTabBar() {
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-black/80 backdrop-blur-xl md:hidden">
       <div className="flex items-stretch justify-around px-1 pb-2 pt-1">
         {TABS.map((tab) => {
-          const active = isActive(pathname, tab.href);
+          const active = isActive(pathname, tab.href, tab.label);
           const Icon = tab.icon;
           return (
             <Link
-              key={tab.href}
+              key={tab.label}
               href={tab.href}
               className="relative flex min-w-0 flex-1 flex-col items-center gap-1 px-1 py-2"
             >

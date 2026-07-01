@@ -2,10 +2,37 @@
 
 import { useWallet } from "@solana/wallet-adapter-react";
 import { usePredictionsStore } from "@/stores/predictions-store";
+import { useAuthModalStore } from "@/stores/auth-modal-store";
+import { useIsAuthenticated } from "@/hooks/use-is-authenticated";
 import { PageHeader } from "@/components/layout/page-header";
 import { GlassCard } from "@/components/ui/glass-card";
 import { TrophyCabinetView } from "@/components/trophy/trophy-cabinet-view";
 import { NftMatchCardsGrid } from "@/components/nft/nft-match-cards-grid";
+
+function SignInPrompt() {
+  const openAuthModal = useAuthModalStore((s) => s.open);
+
+  return (
+    <GlassCard variant="primary" className="text-center">
+      <p className="text-xs uppercase tracking-[0.24em] text-[var(--text-muted)]">
+        Personal data
+      </p>
+      <h3 className="font-display mt-3 text-xl font-semibold text-white">
+        Sign in to view your Pulse profile
+      </h3>
+      <p className="mt-2 text-sm text-[var(--text-secondary)]">
+        Connect with Google or Phantom to sync predictions, trophies, and settings.
+      </p>
+      <button
+        type="button"
+        onClick={() => openAuthModal()}
+        className="mt-6 rounded-full bg-white px-8 py-3 text-sm font-semibold text-black transition-opacity hover:opacity-90"
+      >
+        Sign in to continue
+      </button>
+    </GlassCard>
+  );
+}
 
 function NotificationsSection() {
   return (
@@ -107,6 +134,8 @@ function NftSection() {
 }
 
 export default function MyPulseHubPage() {
+  const isAuthenticated = useIsAuthenticated();
+
   return (
     <section className="px-6 py-16">
       <div className="mx-auto max-w-4xl space-y-12">
@@ -116,9 +145,13 @@ export default function MyPulseHubPage() {
           description="Profile, trophies, notifications, NFT cards, and settings in one place."
         />
 
-        <div id="profile">
-          <ProfileSection />
-        </div>
+        {!isAuthenticated && <SignInPrompt />}
+
+        {isAuthenticated && (
+          <div id="profile">
+            <ProfileSection />
+          </div>
+        )}
 
         <div id="trophy-cabinet">
           <PageHeader eyebrow="Achievements" title="Trophy Cabinet" />
