@@ -11,14 +11,14 @@ export function MatchCard({ match }: { match: EnrichedMatch }) {
           <p className="text-xs font-bold uppercase tracking-widest text-base-black">
             {match.competition} · {match.minuteLabel}
           </p>
-          <p className="mt-4 text-5xl font-black uppercase leading-none tracking-tighter text-base-black md:text-6xl">
+          <p className="text-5xl font-black uppercase leading-none tracking-tighter text-base-black md:text-6xl">
             {match.homeTeam} vs {match.awayTeam}
           </p>
-          <p className="mt-4 text-[12vw] font-black leading-none tracking-tighter text-base-black md:text-8xl">
+          <p className="text-[12vw] font-black leading-none tracking-tighter text-base-black md:text-8xl">
             {match.homeScore} - {match.awayScore}
           </p>
         </div>
-        <div className="relative h-16 w-full bg-base-black">
+        <div className="h-24 w-full bg-base-offwhite">
           <div
             className="h-full bg-brand-lime"
             style={{ width: `${match.pulse}%` }}

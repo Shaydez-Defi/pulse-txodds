@@ -189,7 +189,7 @@ export default function HomeDashboardPage() {
   return (
     <div className="brutal-stack w-full">
       <section className="relative w-full bg-brand-crimson">
-        <div className="absolute bottom-0 left-0 top-0 w-16 bg-base-black">
+        <div className="absolute bottom-0 left-0 top-0 w-16 bg-brand-purple">
           <div
             className="absolute bottom-0 left-0 w-full bg-brand-lime"
             style={{ height: `${FEATURED.pulse}%` }}
@@ -245,10 +245,10 @@ export default function HomeDashboardPage() {
         <div className="brutal-stack mt-0 w-full">
           {LIVE_ALERTS.map((alert) => (
             <div key={alert.match} className="w-full border-0 border-t-4 border-brand-purple p-8">
-              <p className="text-4xl font-bold leading-none tracking-tighter text-white">
+              <p className="text-4xl font-bold leading-none tracking-tighter text-base-offwhite">
                 {alert.match} · {alert.minute}
               </p>
-              <p className="mt-4 text-2xl font-bold text-base-offwhite">{alert.text}</p>
+              <p className="text-4xl font-bold leading-tight text-base-offwhite">{alert.text}</p>
             </div>
           ))}
         </div>
@@ -269,8 +269,8 @@ export default function HomeDashboardPage() {
       </section>
 
       <section className="brutal-stack w-full">
-        <div className="w-full bg-base-black p-8">
-          <h2 className="text-4xl font-black uppercase text-brand-lime">Live now</h2>
+        <div className="w-full bg-brand-purple p-8">
+          <h2 className="text-4xl font-black uppercase text-base-black">Live now</h2>
         </div>
         {LIVE_MATCHES.map((match) => (
           <MatchCard key={match.fixtureId} match={match} />

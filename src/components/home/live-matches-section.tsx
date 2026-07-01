@@ -9,12 +9,10 @@ export function LiveMatchesSection() {
 
   return (
     <section className="brutal-stack w-full">
-      <div className="w-full bg-base-black p-8">
-        <p className="text-sm font-bold uppercase text-brand-lime">Live now</p>
-        <h2 className="text-4xl font-black uppercase text-base-offwhite">
-          Match intelligence
-        </h2>
-        <p className="mt-2 font-bold text-base-offwhite">
+      <div className="w-full bg-brand-purple p-8">
+        <p className="text-sm font-bold uppercase text-base-black">Live now</p>
+        <h2 className="text-4xl font-black uppercase text-base-black">Match intelligence</h2>
+        <p className="font-bold text-base-black">
           {isLoading ? "Syncing…" : `${live.length} live`}
         </p>
       </div>

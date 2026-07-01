@@ -29,7 +29,7 @@ export function HeroSection() {
 
         <Link
           href="/home"
-          className="mt-8 border-0 bg-brand-lime px-12 py-6 text-2xl font-bold text-base-black"
+          className="mt-8 rounded-none border-0 bg-brand-lime px-12 py-6 text-2xl font-bold text-base-black shadow-none"
         >
           Enter Pulse
         </Link>

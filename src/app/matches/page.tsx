@@ -44,47 +44,41 @@ function filterMatches(matches: EnrichedMatch[], tab: Tab) {
 function BrutalMatchRow({ match }: { match: EnrichedMatch }) {
   const isLive = match.status === "live";
   const topBg = isLive ? "bg-brand-crimson" : "bg-brand-purple";
-  const scoreColor = isLive ? "text-white" : "text-base-black";
 
   return (
     <Link href={`/match/${match.fixtureId}`} className="block w-full">
       <article className="brutal-stack w-full">
         <div
           className={clsx(
-            "flex min-h-[40vh] w-full flex-col justify-end p-6 md:p-10",
+            "flex min-h-[60vh] w-full flex-col justify-end p-6 md:p-10",
             topBg
           )}
-          style={{ flex: "0 0 60%" }}
         >
-          <p className="text-xs font-bold uppercase tracking-widest text-white/80">
+          <p className="text-xs font-bold uppercase tracking-widest text-base-offwhite">
             {match.competition}
             {isLive && ` · ${match.minuteLabel}`}
           </p>
-          <p
-            className={clsx(
-              "font-black leading-none tracking-tighter",
-              scoreColor,
-              "text-[20vh]"
-            )}
-          >
+          <p className="text-[20vh] font-black leading-none tracking-tighter text-base-offwhite">
             {match.homeScore} - {match.awayScore}
           </p>
         </div>
 
-        <div className="relative w-full bg-base-offwhite p-6 md:p-10" style={{ flex: "0 0 40%" }}>
-          <p className="text-4xl font-black uppercase leading-none tracking-tighter text-base-black md:text-6xl">
-            {match.homeTeam}
-          </p>
-          <p className="mt-2 text-4xl font-black uppercase leading-none tracking-tighter text-base-black md:text-6xl">
-            {match.awayTeam}
-          </p>
+        <div className="flex min-h-[40vh] w-full flex-col justify-between bg-base-offwhite p-6 md:p-10">
+          <div>
+            <p className="text-6xl font-black uppercase leading-none tracking-tighter text-base-black">
+              {match.homeTeam}
+            </p>
+            <p className="text-6xl font-black uppercase leading-none tracking-tighter text-base-black">
+              {match.awayTeam}
+            </p>
+          </div>
 
-          <div className="relative mt-6 h-24 w-full bg-base-black">
+          <div className="relative h-24 w-full overflow-hidden bg-base-offwhite">
             <div
               className="absolute left-0 top-0 h-full bg-brand-lime"
               style={{ width: `${match.pulse}%` }}
             />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-2xl font-black text-base-black mix-blend-difference">
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-2xl font-black text-base-black">
               {match.pulse}
             </span>
           </div>
@@ -111,12 +105,12 @@ export default function MatchesPage() {
 
   return (
     <div className="brutal-stack w-full">
-      <header className="w-full bg-base-black p-8 text-base-offwhite md:p-12">
-        <p className="text-sm font-bold uppercase tracking-widest">World Cup 2026</p>
-        <h1 className="mt-2 text-6xl font-black uppercase leading-none tracking-tighter md:text-8xl">
+      <header className="w-full bg-brand-purple p-8 md:p-12">
+        <p className="text-sm font-bold uppercase tracking-widest text-base-black">World Cup 2026</p>
+        <h1 className="text-6xl font-black uppercase leading-none tracking-tighter text-base-black md:text-8xl">
           All Matches
         </h1>
-        <p className="mt-4 text-lg font-bold text-brand-lime">
+        <p className="text-lg font-bold text-base-black">
           {isLoading ? "Syncing…" : `${liveCount} live now`}
         </p>
       </header>

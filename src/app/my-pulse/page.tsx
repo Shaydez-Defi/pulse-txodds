@@ -32,8 +32,8 @@ function SignInPrompt() {
 function NotificationsSection() {
   return (
     <div className="brutal-stack w-full">
-      <div className="w-full bg-base-black p-6">
-        <p className="text-sm font-bold uppercase text-brand-lime">Notifications</p>
+      <div className="w-full bg-brand-purple p-6">
+        <p className="text-sm font-bold uppercase text-base-black">Notifications</p>
       </div>
       {[
         "England vs Brazil — Pulse hit 91. High pressure alert.",
@@ -90,7 +90,9 @@ function ProfileSection() {
             {publicKey.toBase58().slice(0, 8)}…{publicKey.toBase58().slice(-6)}
           </p>
         ) : (
-          <p className="mt-2 font-bold text-base-offwhite">Guest Fan</p>
+          <p className="inline-block bg-base-black px-4 py-2 font-bold text-base-offwhite">
+            Guest Fan
+          </p>
         )}
       </div>
       {!publicKey ? (

@@ -51,7 +51,7 @@ export function MatchDetailView({
   return (
     <div className="brutal-stack w-full">
       <section className="relative min-h-[70vh] w-full bg-brand-crimson">
-        <div className="absolute bottom-0 left-0 top-0 w-16 bg-base-black">
+        <div className="absolute bottom-0 left-0 top-0 w-16 bg-brand-purple">
           <div
             className="absolute bottom-0 left-0 w-full bg-brand-lime"
             style={{ height: `${match.pulse}%` }}

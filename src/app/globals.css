@@ -25,6 +25,7 @@
 
 * {
   box-sizing: border-box;
+  border-radius: 0 !important;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -59,23 +60,23 @@ body {
   font-family: var(--font-sora), var(--font-dm-sans), system-ui, sans-serif;
 }
 
-/* Brutalist layout primitives */
 .brutal-stack {
   display: flex;
   flex-direction: column;
   gap: 0;
   width: 100%;
   height: 100%;
+  margin: 0;
 }
 
 .brutal-block {
-  border-radius: 0;
+  border-radius: 0 !important;
   border: 0;
   box-shadow: none;
   backdrop-filter: none;
 }
 
-/* Hero — VIDEO LAYER PRESERVED */
+/* Hero — VIDEO PRESERVED */
 .hero-section {
   position: relative;
   width: 100%;
@@ -95,10 +96,10 @@ body {
 .hero-video-element {
   position: absolute;
   inset: 0;
+  z-index: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center center;
 }
 
 .hero-content {
@@ -106,17 +107,17 @@ body {
   z-index: 10;
 }
 
-/* Wallet */
 .wallet-adapter-button {
-  background: var(--base-black) !important;
+  background: var(--brand-purple) !important;
   border: 0 !important;
   border-radius: 0 !important;
   font-family: var(--font-sora) !important;
-  height: 40px !important;
+  height: 48px !important;
   font-size: 13px !important;
-  color: var(--base-offwhite) !important;
+  font-weight: 700 !important;
+  color: var(--base-black) !important;
 }
 
 .wallet-adapter-button:hover {
-  background: var(--brand-purple) !important;
+  background: var(--brand-lime) !important;
 }

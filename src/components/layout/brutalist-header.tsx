@@ -36,7 +36,7 @@ export function BrutalistHeader() {
 
   return (
     <header className="fixed left-0 right-0 top-0 z-50 h-16 max-h-16 w-full border-0 border-b-4 border-base-black bg-base-offwhite">
-      <div className="flex h-full w-full items-center gap-0 px-3 md:px-6">
+      <div className="flex h-full w-full items-center px-3 md:px-6">
         <Link
           href="/home"
           className="shrink-0 font-headline text-xl font-black uppercase tracking-tighter text-base-black md:text-2xl"
@@ -44,7 +44,7 @@ export function BrutalistHeader() {
           Pulse
         </Link>
 
-        <nav className="flex flex-1 items-center justify-center gap-0 overflow-x-auto">
+        <nav className="flex flex-1 items-center justify-center overflow-x-auto">
           {NAV.map((item) => {
             const active = isActive(pathname, item.href);
             return (
@@ -54,7 +54,7 @@ export function BrutalistHeader() {
                 className={clsx(
                   "shrink-0 px-2 py-1 text-[10px] font-bold uppercase tracking-tight md:px-4 md:py-2 md:text-sm",
                   active
-                    ? "bg-base-black text-base-offwhite"
+                    ? "bg-brand-lime text-base-black"
                     : "text-base-black hover:bg-brand-purple"
                 )}
               >
