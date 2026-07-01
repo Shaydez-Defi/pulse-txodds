@@ -2,13 +2,22 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { signOut as nextSignOut } from "next-auth/react";
+import clsx from "clsx";
 import { useAuthStore } from "@/stores/auth-store";
 import { useAuthModalStore } from "@/stores/auth-modal-store";
 import { useIsAuthenticated } from "@/hooks/use-is-authenticated";
 import { PulseLogo } from "@/components/layout/pulse-logo";
+
+const DESKTOP_NAV = [
+  { href: "/home", label: "Home" },
+  { href: "/matches", label: "Matches" },
+  { href: "/predict", label: "Predict" },
+  { href: "/leaderboard", label: "Board" },
+  { href: "/my-pulse", label: "Pulse" },
+] as const;
 
 const DROPDOWN_LINKS = [
   { href: "/my-pulse", label: "My Pulse" },
@@ -16,7 +25,19 @@ const DROPDOWN_LINKS = [
   { href: "/my-pulse#notifications", label: "Notifications" },
 ] as const;
 
+function isNavActive(pathname: string, href: string) {
+  if (href === "/home") return pathname === "/home";
+  if (href === "/matches") {
+    return pathname === "/matches" || pathname.startsWith("/match/");
+  }
+  if (href === "/my-pulse") {
+    return pathname === "/my-pulse" || pathname.startsWith("/my-pulse/");
+  }
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
 export function BrutalistHeader() {
+  const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -43,10 +64,6 @@ export function BrutalistHeader() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
 
-  function handleAvatarClick() {
-    setOpen((v) => !v);
-  }
-
   async function handleLogout() {
     signOut();
     await nextSignOut({ redirect: false });
@@ -55,15 +72,33 @@ export function BrutalistHeader() {
   }
 
   return (
-    <header className="fixed left-1/2 top-0 z-50 flex h-12 w-full max-w-md -translate-x-1/2 items-center justify-between border-0 bg-base-black px-4 text-base-offwhite">
-      <Link href="/home" className="flex items-center">
+    <header className="fixed top-0 z-50 flex h-12 w-full items-center justify-between border-0 bg-base-black px-4 text-base-offwhite md:px-8">
+      <Link href="/home" className="flex shrink-0 items-center">
         <PulseLogo light />
       </Link>
 
-      <div className="relative" ref={menuRef}>
+      <nav className="hidden flex-1 items-center justify-center gap-0 md:flex">
+        {DESKTOP_NAV.map((item) => {
+          const active = isNavActive(pathname, item.href);
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={clsx(
+                "px-4 py-2 text-xs font-bold uppercase tracking-tight",
+                active ? "bg-brand-lime text-base-black" : "text-base-offwhite hover:bg-brand-purple hover:text-base-black"
+              )}
+            >
+              {item.label}
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className="relative shrink-0" ref={menuRef}>
         <button
           type="button"
-          onClick={handleAvatarClick}
+          onClick={() => setOpen((v) => !v)}
           className="flex h-8 items-center border-0 bg-base-offwhite px-3 text-xs font-bold uppercase text-base-black"
           aria-expanded={open}
           aria-haspopup="menu"
@@ -74,7 +109,7 @@ export function BrutalistHeader() {
         {open && (
           <div
             role="menu"
-            className="absolute right-0 top-full z-50 mt-1 w-40 border-0 bg-base-offwhite text-base-black shadow-none"
+            className="absolute right-0 top-full z-[60] mt-2 w-40 border-0 bg-base-offwhite text-base-black shadow-none"
           >
             <p className="border-0 border-b-4 border-base-black px-3 py-2 text-[10px] font-bold uppercase">
               {displayName}
