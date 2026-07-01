@@ -8,9 +8,7 @@ type NarrativeRequest = {
   awayScore: number;
   minute: number | string;
   pulse: number;
-  dangerousAttacks: number;
-  corners: number;
-  possession: number;
+  momentumTeam: string;
 };
 
 export async function POST(req: Request) {
@@ -26,41 +24,43 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  const {
-    homeTeam,
-    awayTeam,
-    homeScore,
-    awayScore,
-    minute,
-    pulse,
-    dangerousAttacks,
-    corners,
-    possession,
-  } = body;
+  const { homeTeam, awayTeam, homeScore, awayScore, minute, pulse, momentumTeam } = body;
 
   const score = `${homeScore}-${awayScore}`;
   const model = process.env.GROQ_MODEL ?? "llama-3.3-70b-versatile";
 
-  const prompt = `You are a football intelligence AI for an app called Pulse.
-Given these live match stats, write exactly ONE dramatic sentence (maximum 20 words) that captures the current momentum and what might happen next.
-Be direct, cinematic, and specific. No generic commentary.
+  const prompt = `You are the voice of Pulse — a football intelligence app that reads matches like no one else.
 
-Match: ${homeTeam} vs ${awayTeam}
-Score: ${score}
-Minute: ${minute}
+Your job is to write ONE sentence that makes the reader feel the match in their chest.
+
+Rules:
+- Maximum 25 words
+- No statistics, no numbers, no percentages
+- Sound like the most switched-on football fan in the stadium — not a commentator, not a robot
+- Use vivid, physical language — pressure, suffocation, collapse, dominance, desperation
+- Make it feel inevitable, like something is about to happen
+- Never be generic. Never say "playing well" or "in good form"
+- Write only the sentence. Nothing else. No punctuation at the end except a period.
+
+Match context:
+${homeTeam} vs ${awayTeam} · ${score} · Minute ${minute}
 Pulse intensity: ${pulse}/100
-Dangerous attacks last 10 mins: ${dangerousAttacks}
-Corners last 10 mins: ${corners}
-Possession: ${homeTeam} ${possession}%
+Momentum: ${momentumTeam} dominating last 10 minutes
 
-Write only the sentence. Nothing else.`;
+Examples of the tone we want:
+- "Brazil are suffocating every breath out of England's midfield and the dam is about to break."
+- "France have turned this into a siege. Argentina are defending with their eyes closed."
+- "Germany smell blood. Spain have forgotten how to play football in the last eight minutes."
+- "This match has a goal written all over it and Morocco know it."
+- "England are not just winning — they are dismantling Brazil piece by piece."
+- "The crowd can feel it. The players can feel it. Something is seconds away."`;
 
   try {
     const groq = new Groq({ apiKey });
     const completion = await groq.chat.completions.create({
       model,
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 60,
+      max_tokens: 80,
       temperature: 0.85,
     });
 

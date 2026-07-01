@@ -8,6 +8,7 @@ import { AuthModal } from "@/components/auth/auth-modal";
 import { useAuthModalStore } from "@/stores/auth-modal-store";
 import { Sidebar } from "@/components/sidebar";
 import { MobileTabBar } from "./mobile-tab-bar";
+import { MobileTopNav } from "./mobile-top-nav";
 
 const SIDEBAR_COLLAPSED_KEY = "pulse-sidebar-collapsed";
 
@@ -34,10 +35,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {!isLanding && (
         <Sidebar collapsed={collapsed} onCollapsedChange={setCollapsed} />
       )}
+      {!isLanding && <MobileTopNav />}
       <main
         className={clsx(
           "min-h-screen",
-          !isLanding && "pb-24 md:pb-8",
+          !isLanding && "pt-14 pb-24 md:pt-0 md:pb-8",
           !isLanding && (collapsed ? "md:ml-16" : "md:ml-64")
         )}
       >

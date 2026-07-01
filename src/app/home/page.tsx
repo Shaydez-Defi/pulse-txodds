@@ -173,9 +173,7 @@ export default function HomePage() {
           awayScore: FEATURED.awayScore,
           minute: FEATURED.minute,
           pulse: FEATURED.pulse,
-          dangerousAttacks: FEATURED.dangerousAttacks,
-          corners: FEATURED.corners,
-          possession: FEATURED.possessionHome,
+          momentumTeam: FEATURED.homeTeam,
         }),
       });
 
