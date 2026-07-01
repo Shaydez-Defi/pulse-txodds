@@ -56,20 +56,16 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
   const displayName =
     user?.name ?? session?.user?.name ?? session?.user?.email ?? "User";
 
-  const footballVariants = {
-    closed: { x: 0, rotate: 0 },
-    open: {
-      x: 20,
-      rotate: 360,
-      transition: { duration: 0.4, ease: "easeInOut" as const },
-    },
-  };
+  const isOpen = !collapsed;
 
   return (
     <motion.aside
       animate={{ width: collapsed ? 64 : 256 }}
       transition={{ type: "spring", stiffness: 200, damping: 20, duration: 0.3 }}
-      className="glass-sidebar fixed left-0 top-0 z-50 hidden h-screen flex-col overflow-hidden md:flex"
+      className="fixed left-0 top-0 z-50 hidden h-screen flex-col overflow-hidden border-r border-white/10 md:flex"
+      style={{
+        background: `linear-gradient(180deg, rgba(8,9,15,0.95) 0%, rgba(8,9,15,0.85) 100%), url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=400&q=80') center/cover`,
+      }}
     >
       <div
         className={clsx(
@@ -124,26 +120,32 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
           collapsed ? "flex justify-center px-2 py-2" : "px-4 py-2"
         )}
       >
-        <button
+        <motion.button
           type="button"
           onClick={() => onCollapsedChange(!collapsed)}
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-[var(--text-secondary)] transition-colors hover:bg-white/5 hover:text-[#22C55E]"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 transition-colors hover:bg-white/10"
+          whileTap={{ scale: 0.9 }}
         >
-          <motion.svg
-            viewBox="0 0 24 24"
-            className="h-6 w-6"
-            variants={footballVariants}
-            animate={collapsed ? "closed" : "open"}
+          <motion.div
+            animate={isOpen ? { rotate: 360, x: 4 } : { rotate: 0, x: 0 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
           >
-            <circle cx="12" cy="12" r="10" fill="white" stroke="#333" strokeWidth="1" />
-            <path
-              d="M12 2 L14 7 L19 7 L15 10 L17 15 L12 12 L7 15 L9 10 L5 7 L10 7 Z"
-              fill="#333"
-              opacity="0.3"
-            />
-          </motion.svg>
-        </button>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="10" r="9" fill="white" stroke="rgba(0,0,0,0.2)" strokeWidth="0.5" />
+              <path
+                d="M10 3.5 L11.5 7H15L12 9.5L13.5 13L10 10.5L6.5 13L8 9.5L5 7H8.5Z"
+                fill="black"
+                opacity="0.15"
+              />
+              <path
+                d="M10 1C5 1 1 5 1 10C1 15 5 19 10 19C15 19 19 15 19 10C19 5 15 1 10 1ZM10 3C10 3 11 5 10 7C9 5 10 3 10 3ZM6 5C6 5 8 5.5 9 7.5C7 7 6 5 6 5ZM14 5C14 5 13 7 11 7.5C12 5.5 14 5 14 5Z"
+                fill="black"
+                opacity="0.1"
+              />
+            </svg>
+          </motion.div>
+        </motion.button>
       </div>
 
       <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-2 py-4">
