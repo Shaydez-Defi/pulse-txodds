@@ -1,12 +1,24 @@
 "use client";
 
-import { useMatches } from "@/hooks/use-matches";
+import { useQuery } from "@tanstack/react-query";
+import type { EnrichedMatch } from "@/lib/types";
 import { MatchCard } from "@/components/match/match-card";
 import { PageHeader } from "@/components/layout/page-header";
 import { AuroraOrbs } from "@/components/ui/aurora-orbs";
 
+async function fetchMatches(): Promise<EnrichedMatch[]> {
+  const res = await fetch("/api/matches");
+  if (!res.ok) throw new Error("Failed to fetch matches");
+  const data = (await res.json()) as { matches: EnrichedMatch[] };
+  return data.matches;
+}
+
 export default function MatchesPage() {
-  const { data, isLoading } = useMatches();
+  const { data, isLoading } = useQuery({
+    queryKey: ["fixtures"],
+    queryFn: fetchMatches,
+    refetchInterval: 30_000,
+  });
 
   return (
     <section className="relative px-6 py-16">

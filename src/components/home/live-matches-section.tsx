@@ -14,7 +14,8 @@ export function LiveMatchesSection() {
       <div className="relative mx-auto max-w-7xl">
         <div className="mb-12 flex items-end justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.24em] text-[var(--accent-green)]">
+            <p className="text-xs font-bold uppercase tracking-widest text-white/40">
+              <span className="mr-2 inline-block h-2 w-2 animate-pulse rounded-full bg-[#22C55E]" />
               Live now
             </p>
             <h2 className="font-display mt-2 text-3xl font-bold tracking-tight">

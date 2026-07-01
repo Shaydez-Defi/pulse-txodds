@@ -60,7 +60,7 @@ export function HeroSection() {
             <div className="flex gap-4 justify-center">
               <Link
                 href="/home"
-                className="rounded-full bg-white px-8 py-3 font-semibold text-black shadow-lg shadow-black/40 transition-all hover:scale-[1.02] hover:opacity-90 active:scale-[0.98]"
+                className="rounded-full bg-[#22C55E] px-8 py-3 font-bold text-black shadow-lg shadow-black/40 transition-all hover:scale-[1.02] hover:bg-[#16A34A] active:scale-[0.98]"
               >
                 Enter Pulse
               </Link>

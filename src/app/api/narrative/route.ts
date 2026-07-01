@@ -1,14 +1,25 @@
 import Groq from "groq-sdk";
 import { NextResponse } from "next/server";
 
+type HotPlayerInput = {
+  name: string;
+  shots?: number;
+  goals?: number;
+  rating?: number;
+};
+
 type NarrativeRequest = {
-  homeTeam: string;
-  awayTeam: string;
-  homeScore: number;
-  awayScore: number;
+  team1?: string;
+  team2?: string;
+  homeTeam?: string;
+  awayTeam?: string;
+  score?: string;
+  homeScore?: number;
+  awayScore?: number;
   minute: number | string;
   pulse: number;
-  momentumTeam: string;
+  momentumTeam?: string;
+  players?: HotPlayerInput[];
 };
 
 export async function POST(req: Request) {
@@ -24,9 +35,18 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  const { homeTeam, awayTeam, homeScore, awayScore, minute, pulse, momentumTeam } = body;
+  const team1 = body.team1 ?? body.homeTeam ?? "Home";
+  const team2 = body.team2 ?? body.awayTeam ?? "Away";
+  const score =
+    body.score ??
+    `${body.homeScore ?? 0}-${body.awayScore ?? 0}`;
+  const { minute, pulse, players } = body;
 
-  const score = `${homeScore}-${awayScore}`;
+  const hotPlayer = players?.[0];
+  const playerContext = hotPlayer
+    ? `Hottest player: ${hotPlayer.name} — ${hotPlayer.shots ?? 0} shots, ${hotPlayer.goals ?? 0} goals, rating ${hotPlayer.rating ?? 0}`
+    : "";
+
   const model = process.env.GROQ_MODEL ?? "llama-3.3-70b-versatile";
 
   const prompt = `You are the voice of Pulse — a football intelligence app that reads matches like no one else.
@@ -38,18 +58,18 @@ Rules:
 - No statistics, no numbers, no percentages
 - Sound like the most switched-on football fan in the stadium — not a commentator, not a robot
 - Use vivid, physical language — pressure, suffocation, collapse, dominance, desperation
+- If a hot player is provided, mention them by name — make them the story
 - Make it feel inevitable, like something is about to happen
 - Never be generic. Never say "playing well" or "in good form"
-- Write only the sentence. Nothing else. No punctuation at the end except a period.
+- Write only the sentence. One period at the end. Nothing else.
 
-Match context:
-${homeTeam} vs ${awayTeam} · ${score} · Minute ${minute}
+Match: ${team1} vs ${team2} · ${score} · Minute ${minute}
 Pulse intensity: ${pulse}/100
-Momentum: ${momentumTeam} dominating last 10 minutes
+${playerContext}
 
-Examples of the tone we want:
+Examples of the tone:
 - "Brazil are suffocating every breath out of England's midfield and the dam is about to break."
-- "France have turned this into a siege. Argentina are defending with their eyes closed."
+- "Mbappé has touched the ball twelve times in six minutes. France don't just have momentum — they have their best player alive."
 - "Germany smell blood. Spain have forgotten how to play football in the last eight minutes."
 - "This match has a goal written all over it and Morocco know it."
 - "England are not just winning — they are dismantling Brazil piece by piece."

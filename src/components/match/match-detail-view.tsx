@@ -2,8 +2,12 @@
 
 import { motion } from "framer-motion";
 import type { MatchDetail } from "@/lib/types";
+import { getCountryFlag } from "@/lib/flags";
 import { useMatchDetail } from "@/hooks/use-match-detail";
+import { useMatchPlayers } from "@/hooks/use-match-players";
 import { useStadiumStore } from "@/stores/stadium-store";
+import { HotPlayerCard } from "@/components/hot-player-card";
+import { ManOfTheMatch } from "@/components/man-of-match";
 import { AnticipationBanner } from "./anticipation-banner";
 import { CircularPulseMeter } from "./circular-pulse-meter";
 import { LiveOdds } from "./live-odds";
@@ -27,6 +31,8 @@ export function MatchDetailView({
   );
   const match = matchProp ?? fetchedMatch;
   const theme = useStadiumStore((s) => s.theme);
+  const activeFixtureId = fixtureId ?? match?.fixtureId ?? 0;
+  const { data: hotPlayers = [] } = useMatchPlayers(activeFixtureId, Boolean(match));
 
   if (!matchProp && isLoading) {
     return (
@@ -44,6 +50,9 @@ export function MatchDetailView({
     );
   }
 
+  const isFinished = match.status === "finished";
+  const motm = hotPlayers[0];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -51,29 +60,32 @@ export function MatchDetailView({
       className="space-y-8"
     >
       <div
-        className="rounded-2xl border border-white/8 px-8 py-10"
+        className="glass-primary rounded-2xl px-8 py-10"
         style={{ background: theme.gradient }}
       >
         <div className="flex flex-wrap items-center justify-between gap-8">
           <div className="text-center md:text-left">
-            <p className="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]">
+            <p className="text-xs font-bold uppercase tracking-widest text-white/40">
               {match.competition}
             </p>
             <h1 className="font-display mt-4 text-3xl font-bold md:text-4xl">
-              {match.homeTeam}
+              {getCountryFlag(match.homeTeam)} {match.homeTeam}
             </h1>
           </div>
           <div className="text-center">
-            <p className="font-display text-5xl font-bold">
+            <p className="font-display text-7xl font-black text-white">
               {match.homeScore} – {match.awayScore}
             </p>
-            <p className="mt-2 text-sm uppercase tracking-widest text-[var(--accent-green)]">
+            <p className="mt-2 text-sm font-medium uppercase tracking-widest text-[#22C55E]">
+              {match.status === "live" && (
+                <span className="mr-2 inline-block h-2 w-2 animate-pulse rounded-full bg-[#22C55E]" />
+              )}
               {match.minuteLabel}
             </p>
           </div>
           <div className="text-center md:text-right">
             <h1 className="font-display text-3xl font-bold md:text-4xl">
-              {match.awayTeam}
+              {match.awayTeam} {getCountryFlag(match.awayTeam)}
             </h1>
           </div>
         </div>
@@ -93,6 +105,23 @@ export function MatchDetailView({
           <MomentumTimeline blocks={match.momentumTimeline} />
         </div>
       </div>
+
+      {hotPlayers.length > 0 && (
+        <div>
+          <p className="mb-4 text-xs font-bold uppercase tracking-widest text-white/40">
+            🔥 Hot players right now
+          </p>
+          <div className="grid gap-4 md:grid-cols-3">
+            {hotPlayers.map((player) => (
+              <HotPlayerCard key={player.id} player={player} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {isFinished && motm && (
+        <ManOfTheMatch player={motm} team={motm.team ?? match.homeTeam} />
+      )}
 
       <div className="grid gap-8 lg:grid-cols-2">
         <StoryCards stories={match.stories} />

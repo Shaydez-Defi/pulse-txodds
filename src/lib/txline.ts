@@ -246,18 +246,48 @@ export async function getLiveScores(
   );
 }
 
-/** Latest odds snapshot for a specific match. Uses GET /api/odds/snapshot/{fixtureId}. */
+/** Latest odds for a specific match. Uses GET /api/odds/updates/{fixtureId}. */
 export async function getOdds(fixtureId: number): Promise<TxlineOdds[]> {
   return withFallback(
     `getOdds(${fixtureId})`,
     async () => {
-      const response = await getTxlineClient().get<TxlineOdds[]>(
-        `/api/odds/snapshot/${fixtureId}`
+      const response = await getTxlineClient().get<TxlineOdds[] | string>(
+        `/api/odds/updates/${fixtureId}`
       );
-      return response.data;
+      const data = response.data;
+      if (Array.isArray(data)) {
+        return data.length ? [data[data.length - 1]] : [];
+      }
+      if (typeof data === "string") {
+        const lines = data.split("\n").filter((l) => l.startsWith("data: "));
+        if (!lines.length) return [];
+        const last = JSON.parse(lines[lines.length - 1].slice(6)) as TxlineOdds;
+        return [last];
+      }
+      return [];
     },
     () => getMockData().odds.filter((o) => o.FixtureId === fixtureId)
   );
+}
+
+/** Stream live score updates via SSE. */
+export function streamScores(
+  fixtureId: number,
+  onUpdate: (data: TxlineScoreEvent) => void
+) {
+  const { origin } = getTxlineConfig();
+  const url = `${origin}/api/scores/updates/${fixtureId}`;
+  const es = new EventSource(url);
+
+  es.onmessage = (e) => {
+    try {
+      onUpdate(JSON.parse(e.data) as TxlineScoreEvent);
+    } catch {
+      /* skip malformed events */
+    }
+  };
+
+  return () => es.close();
 }
 
 /** Realistic World Cup fallback data when the API is unreachable. */

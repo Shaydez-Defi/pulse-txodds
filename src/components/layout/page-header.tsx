@@ -9,7 +9,7 @@ export function PageHeader({
 }) {
   return (
     <div className="mb-12">
-      <p className="text-xs uppercase tracking-[0.24em] text-[var(--text-muted)]">
+      <p className="text-xs font-bold uppercase tracking-widest text-white/40">
         {eyebrow}
       </p>
       <h1 className="font-display mt-3 text-4xl font-bold tracking-tight">

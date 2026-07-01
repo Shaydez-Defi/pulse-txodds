@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { motion } from "framer-motion";
 import clsx from "clsx";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useSession } from "next-auth/react";
@@ -55,12 +56,20 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
   const displayName =
     user?.name ?? session?.user?.name ?? session?.user?.email ?? "User";
 
+  const footballVariants = {
+    closed: { x: 0, rotate: 0 },
+    open: {
+      x: 20,
+      rotate: 360,
+      transition: { duration: 0.4, ease: "easeInOut" as const },
+    },
+  };
+
   return (
-    <aside
-      className={clsx(
-        "fixed left-0 top-0 z-50 hidden h-screen flex-col border-r border-white/10 bg-black/40 backdrop-blur-xl transition-all duration-300 md:flex",
-        collapsed ? "w-16" : "w-64"
-      )}
+    <motion.aside
+      animate={{ width: collapsed ? 64 : 256 }}
+      transition={{ type: "spring", stiffness: 200, damping: 20, duration: 0.3 }}
+      className="glass-sidebar fixed left-0 top-0 z-50 hidden h-screen flex-col overflow-hidden md:flex"
     >
       <div
         className={clsx(
@@ -119,9 +128,21 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
           type="button"
           onClick={() => onCollapsedChange(!collapsed)}
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-[var(--text-secondary)] transition-colors hover:bg-white/5 hover:text-white"
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-[var(--text-secondary)] transition-colors hover:bg-white/5 hover:text-[#22C55E]"
         >
-          <ChevronIcon collapsed={collapsed} />
+          <motion.svg
+            viewBox="0 0 24 24"
+            className="h-6 w-6"
+            variants={footballVariants}
+            animate={collapsed ? "closed" : "open"}
+          >
+            <circle cx="12" cy="12" r="10" fill="white" stroke="#333" strokeWidth="1" />
+            <path
+              d="M12 2 L14 7 L19 7 L15 10 L17 15 L12 12 L7 15 L9 10 L5 7 L10 7 Z"
+              fill="#333"
+              opacity="0.3"
+            />
+          </motion.svg>
         </button>
       </div>
 
@@ -138,8 +159,8 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
                 "flex items-center rounded-lg text-sm transition-colors",
                 collapsed ? "justify-center px-2 py-2.5" : "gap-3 px-4 py-2.5",
                 active
-                  ? "bg-white/10 text-white"
-                  : "text-[var(--text-secondary)] hover:bg-white/5 hover:text-white"
+                  ? "border-l-2 border-[#22C55E] bg-[#22C55E]/10 text-[#22C55E]"
+                  : "text-[var(--text-secondary)] hover:bg-white/5 hover:text-[#22C55E]"
               )}
             >
               <Icon className="h-5 w-5 shrink-0" />
@@ -210,27 +231,7 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
           {collapsed ? "" : "Select Wallet"}
         </WalletMultiButton>
       </div>
-    </aside>
-  );
-}
-
-function ChevronIcon({ collapsed }: { collapsed: boolean }) {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      className={clsx("transition-transform duration-300", collapsed && "rotate-180")}
-    >
-      <path
-        d="M15 18l-6-6 6-6"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+    </motion.aside>
   );
 }
 
