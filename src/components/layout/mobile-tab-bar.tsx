@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import clsx from "clsx";
 
 const TABS = [
-  { href: "/matches", label: "Home", icon: HomeIcon },
+  { href: "/home", label: "Home", icon: HomeIcon },
   { href: "/matches", label: "Matches", icon: MatchesIcon },
   { href: "/predict", label: "Predict", icon: PredictIcon },
   { href: "/leaderboard", label: "Leaderboard", icon: BoardIcon },
@@ -13,7 +13,10 @@ const TABS = [
 ] as const;
 
 function isActive(pathname: string, href: string, label: string) {
-  if (label === "Home" || href === "/matches") {
+  if (label === "Home") {
+    return pathname === "/home";
+  }
+  if (href === "/matches") {
     return pathname === "/matches" || pathname.startsWith("/match/");
   }
   return pathname === href || pathname.startsWith(`${href}/`);

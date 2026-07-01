@@ -14,7 +14,7 @@ import { useIsAuthenticated } from "@/hooks/use-is-authenticated";
 type NavIcon = React.ComponentType<{ className?: string }>;
 
 const PRIMARY_LINKS: { href: string; label: string; icon: NavIcon }[] = [
-  { href: "/matches", label: "Home", icon: HomeIcon },
+  { href: "/home", label: "Home", icon: HomeIcon },
   { href: "/matches", label: "Matches", icon: MatchesIcon },
   { href: "/predict", label: "Prediction League", icon: PredictIcon },
   { href: "/leaderboard", label: "Leaderboard", icon: BoardIcon },
@@ -30,8 +30,11 @@ const MORE_LINKS: { href: string; label: string; icon: NavIcon }[] = [
 
 function isActive(pathname: string, href: string) {
   const base = href.split("#")[0];
+  if (base === "/home") {
+    return pathname === "/home";
+  }
   if (base === "/matches") {
-    return pathname === "/matches" || pathname.startsWith("/match/");
+    return pathname === "/matches";
   }
   return pathname === base || pathname.startsWith(`${base}/`);
 }
@@ -65,7 +68,7 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
           collapsed ? "justify-center px-2 py-4" : "justify-between px-4 py-4"
         )}
       >
-        <Link href="/matches" className={clsx(collapsed && "mx-auto")}>
+        <Link href="/home" className={clsx(collapsed && "mx-auto")}>
           {collapsed ? (
             <span className="font-display text-lg font-bold text-white">P</span>
           ) : (
